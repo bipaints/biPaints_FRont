@@ -20,7 +20,7 @@
 }
 
 :root {
-  --header-height: 3.75rem; /* 44px compact navbar */
+  --header-height: 70px;
 }
 
 .font-dm-serif {
@@ -33,13 +33,13 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: calc(var(--header-height) + 0.625rem);
+  scroll-padding-top: calc(var(--header-height) + 10px);
   font-family: 'Public Sans', sans-serif;
 }
 
 /* Offset all anchored sections so their headings are never clipped under the fixed navbar */
 section[id], footer[id], div[id], span[id] {
-  scroll-margin-top: calc(var(--header-height) + 0.625rem);
+  scroll-margin-top: calc(var(--header-height) + 10px);
 }
 
 body {

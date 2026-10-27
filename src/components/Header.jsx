@@ -27,7 +27,7 @@ function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
+ 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -89,26 +89,28 @@ function Header() {
   ];
 
   return (
-    <header
-      ref={navRef}
-      className={`fixed top-0 left-0 right-0 z-50 bg-white transition-all duration-200 ${
-        isScrolled ? 'shadow-sm border-b border-gray-200' : 'border-b border-gray-100'
-      }`}
-    >
-      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-52 sm:h-11">
+   <header
+  ref={navRef}
+  className={`fixed top-0 left-0 right-0 z-50 bg-white relative transition-all duration-200 h-[70px] ${
+    isScrolled
+      ? "shadow-sm border-b border-gray-200"
+      : "border-b border-gray-100"
+  }`}
+>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full absolute left-0 w-full">
+        <div className="flex items-center justify-between h-full">
           
           {/* Left: Company Logo */}
           <a href="/" className="flex-shrink-0 flex items-center pr-2">
             <img
               src="/bi-logo.svg"
               alt="BI Group Logo"
-              className="h-5 sm:h-5.5 w-auto object-contain transition-all duration-200"
+              className="h-[30px] max-h-[30px] max-w-[calc(100vw-120px)] sm:max-w-none w-auto object-contain transition-all duration-200"
             />
           </a>
 
           {/* Center / Right: Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1.5 2xl:gap-2">
+          <nav className="hidden lg:flex items-center gap-0.5 xl:gap-1 2xl:gap-1.5">
             {navItems.map((item) => (
               <div
                 key={item.label}
@@ -121,7 +123,7 @@ function Header() {
                   onClick={() => {
                     setActiveDropdown(null);
                   }}
-                  className="flex items-center gap-0.5 font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase tracking-wide text-[#0f1f3d] hover:text-[#c8963e] px-1.5 xl:px-2 py-0.5 rounded transition-colors duration-200 whitespace-nowrap cursor-pointer select-none"
+                  className="flex items-center gap-0.5 font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase tracking-wide text-[#0f1f3d] hover:text-[#c8963e] px-1.5 xl:px-2 py-1 rounded transition-colors duration-200 whitespace-nowrap cursor-pointer select-none"
                 >
                   {item.label}
                   {item.submenu && (
@@ -136,7 +138,7 @@ function Header() {
 
                 {/* Dropdown Menu */}
                 {item.submenu && activeDropdown === item.label && (
-                  <div className="absolute top-full left-0 pt-0.5 z-50">
+                  <div className="absolute top-full left-0 pt-1 z-50">
                     <div className="w-48 bg-white rounded-lg shadow-xl border border-gray-100 py-1">
                       {item.submenu.map((sub) => {
                         const subLabel = typeof sub === 'string' ? sub : sub.label;
@@ -161,7 +163,7 @@ function Header() {
             ))}
 
             {/* Language Selector */}
-            <button className="flex items-center gap-0.5 font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase text-[#0f1f3d] hover:text-[#c8963e] px-1 py-0.5 transition-colors duration-200 cursor-pointer">
+            <button className="flex items-center gap-0.5 font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase text-[#0f1f3d] hover:text-[#c8963e] px-1.5 py-1 transition-colors duration-200 cursor-pointer">
               <span>Eng</span>
               <ChevronDown size={10} />
             </button>
@@ -171,22 +173,30 @@ function Header() {
               <button
                 onClick={() => setSearchOpen(!searchOpen)}
                 aria-label="Toggle Search"
-                className="text-[#0f1f3d] hover:text-[#c8963e] p-1 transition-colors duration-200 cursor-pointer flex items-center"
+                className="text-[#0f1f3d] hover:text-[#c8963e] p-1.5 transition-colors duration-200 cursor-pointer flex items-center"
               >
                 <Search size={15} />
               </button>
 
               {searchOpen && (
-                <div className="absolute right-0 top-full mt-1 w-64 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
+                <div className="absolute right-0 top-full mt-2 w-64 bg-white rounded-lg shadow-lg border border-gray-200 p-2 z-50">
                   <input
                     type="text"
                     placeholder="Search BI Group..."
-                    className="w-full px-2.5 py-1 font-google-sans text-xs border border-gray-300 rounded focus:outline-none focus:border-[#c8963e]"
+                    className="w-full px-2.5 py-1.5 font-google-sans text-xs border border-gray-300 rounded focus:outline-none focus:border-[#c8963e]"
                     autoFocus
                   />
                 </div>
               )}
             </div>
+
+            {/* Contact Us Button */}
+            <a
+              href="#contact"
+              className="font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-[#c8963e] text-[#0f1f3d] hover:bg-[#c8963e] hover:text-[#0f1f3d] transition-all duration-200 whitespace-nowrap cursor-pointer select-none ml-1"
+            >
+              Contact Us
+            </a>
           </nav>
 
           {/* Mobile Right Controls: Search & Hamburger Button */}
@@ -194,16 +204,16 @@ function Header() {
             <button
               onClick={() => setSearchOpen(!searchOpen)}
               aria-label="Search"
-              className="text-[#0f1f3d] p-1 hover:text-[#c8963e] transition-colors duration-200"
+              className="text-[#0f1f3d] p-1.5 hover:text-[#c8963e] transition-colors duration-200"
             >
-              <Search size={17} />
+              <Search size={18} />
             </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle Menu"
-              className="p-1 text-[#0f1f3d] hover:text-[#c8963e] transition-colors duration-200"
+              className="p-1.5 text-[#0f1f3d] hover:text-[#c8963e] transition-colors duration-200"
             >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
@@ -215,7 +225,7 @@ function Header() {
           <input
             type="text"
             placeholder="Search BI Group..."
-            className="w-full px-3 py-1 text-xs border border-gray-300 rounded-md focus:outline-none focus:border-[#1a5276]"
+            className="w-full px-3 py-1.5 text-xs border border-gray-300 rounded-md focus:outline-none focus:border-[#1a5276]"
             autoFocus
           />
         </div>
@@ -223,7 +233,7 @@ function Header() {
 
       {/* Mobile Drawer Menu */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-white border-t border-gray-100 px-4 py-2 shadow-xl max-h-[75vh] overflow-y-auto space-y-1">
+        <div className="lg:hidden bg-white border-t border-gray-100 px-4 py-3 shadow-xl max-h-[calc(100vh-70px)] overflow-y-auto space-y-1">
           {navItems.map((item) => (
             <div key={item.label} className="border-b border-gray-100 pb-1">
               <div className="flex items-center justify-between">
@@ -277,10 +287,12 @@ function Header() {
           ))}
 
           {/* Mobile Language Button */}
-          <div className="pt-1 flex items-center gap-2 font-google-sans text-xs font-semibold uppercase text-[#0f1f3d]">
+          <div className="pt-1.5 flex items-center gap-2 font-google-sans text-xs font-semibold uppercase text-[#0f1f3d]">
             <span>Language:</span>
             <span className="text-[#c8963e]">English</span>
           </div>
+
+          
         </div>
       )}
     </header>

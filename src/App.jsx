@@ -56,7 +56,7 @@ function App() {
       const el = document.getElementById(targetId);
       if (!el) return;
       const header = document.querySelector('header');
-      const headerHeight = header ? header.offsetHeight : 44;
+      const headerHeight = header ? header.offsetHeight : 70;
       const targetPadding = 10;
       const elementPosition = el.getBoundingClientRect().top + window.pageYOffset;
       const targetScrollTop = Math.max(0, elementPosition - headerHeight - targetPadding);

@@ -11,7 +11,7 @@ import React from 'react';
  */
 function AboutHero() {
   return (
-    <section className="font-inter pt-11 scroll-mt-14">
+    <section className="font-inter pt-[70px] scroll-mt-[70px]">
       <div className="relative w-full overflow-hidden h-[200px] sm:h-[250px] lg:h-[290px]">
         {/* Background Image Container */}
         <div className="absolute inset-0">

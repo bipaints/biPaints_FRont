@@ -144,7 +144,7 @@ function Hero() {
       role="region"
       aria-roledescription="carousel"
       aria-label="BI Group Business Verticals Showcase"
-      className="relative w-full overflow-hidden pt-11 sm:pt-11 bg-slate-950 select-none min-h-[380px] sm:min-h-[410px] md:min-h-[440px] h-[52vh] max-h-[490px] scroll-mt-14"
+      className="relative w-full overflow-hidden pt-[70px] bg-slate-950 select-none h-[480px] sm:h-[540px] md:h-[580px] lg:h-[650px] scroll-mt-[70px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -220,11 +220,11 @@ function Hero() {
           <div className="pt-1.5 sm:pt-2">
             <a
               href={active.link || '#businesses'}
-              className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3 sm:py-3.5 rounded-full font-semibold text-xs sm:text-sm tracking-wider uppercase border-2 border-[#c8963e] text-[#c8963e] hover:bg-[#c8963e] hover:text-[#0f1f3d] bg-black/25 backdrop-blur-sm shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-[#c8963e]/20 transition-all duration-300 ease-in-out group cursor-pointer hover:-translate-y-0.5"
+              className="inline-flex items-center justify-center gap-2 px-[18px] py-[8px] h-[36px] rounded-full font-semibold text-[13px] sm:text-[14px] tracking-wider uppercase border border-[#c8963e] text-[#c8963e] hover:bg-[#c8963e] hover:text-[#0f1f3d] bg-black/25 backdrop-blur-sm shadow-md shadow-black/20 hover:shadow-lg hover:shadow-[#c8963e]/20 transition-all duration-300 ease-in-out group cursor-pointer hover:-translate-y-0.5 whitespace-nowrap text-center"
             >
               <span>Read More</span>
               <ArrowRight
-                size={16}
+                size={14}
                 className="transition-transform duration-300 group-hover:translate-x-1 text-[#c8963e] group-hover:text-[#0f1f3d]"
               />
             </a>
