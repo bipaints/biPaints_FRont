@@ -191,12 +191,6 @@ function Header() {
             </div>
 
             {/* Contact Us Button */}
-            <a
-              href="#contact"
-              className="font-google-sans text-[11px] xl:text-[11.5px] 2xl:text-[12px] font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-[#c8963e] text-[#0f1f3d] hover:bg-[#c8963e] hover:text-[#0f1f3d] transition-all duration-200 whitespace-nowrap cursor-pointer select-none ml-1"
-            >
-              Contact Us
-            </a>
           </nav>
 
           {/* Mobile Right Controls: Search & Hamburger Button */}

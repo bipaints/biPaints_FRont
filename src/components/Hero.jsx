@@ -144,7 +144,7 @@ function Hero() {
       role="region"
       aria-roledescription="carousel"
       aria-label="BI Group Business Verticals Showcase"
-      className="relative w-full overflow-hidden pt-[70px] bg-slate-950 select-none h-[480px] sm:h-[540px] md:h-[580px] lg:h-[650px] scroll-mt-[70px]"
+      className="relative w-full overflow-hidden pt-[70px] bg-slate-950 select-none h-[550px] sm:h-550px] md:h-[550px] lg:h-[550px] scroll-mt-[70px]"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
