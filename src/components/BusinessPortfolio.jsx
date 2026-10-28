@@ -1,151 +1,123 @@
-import React from 'react';
-import { ArrowRight, ExternalLink } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import ScrollRevealImage from "./ScrollRevealImage";
+import { cardUp, fadeUp, hoverLiftCard, hoverScaleButton, hoverTransition, staggerContainer, tapScaleButton, viewportOnce } from "../lib/motion";
 
-/**
- * BusinessPortfolio Component ("One Group. Multiple Possibilities.")
- * Senior UI/UX Redesign: High-definition imagery, category pills,
- * refined hover card depth, and streamlined visual consistency.
- */
-function BusinessPortfolio() {
-  const businesses = [
-    {
-      category: 'Paints & Coatings',
-      title: 'BI Painting Solution',
-      description:
-        'Comprehensive decorative and industrial paint systems, inspiring color palettes, and lasting protection for residential, commercial, and marine architecture.',
-      image: '/vertical-paints-card.jpg',
-      href: '#products',
-    },
-    {
-      category: 'Modular Living',
-      title: 'BI Modular Kitchen',
-      description:
-        'State-of-the-art modular kitchen and interior cabinetry combining European hardware, ergonomic utility, and bespoke finishes for dream homes.',
-      image: '/kitchen-modern.jpg',
-      href: '#kitchens',
-    },
-    {
-      category: 'Smart Tech & HVAC',
-      title: 'BI Electronics',
-      description:
-        'Advanced inverter air conditioning systems, energy-efficient home appliances, and smart industrial automation electronics.',
-      image: '/category-air-conditioner.jpg',
-      href: '#electronics',
-    },
-    {
-      category: 'Holistic Wellness',
-      title: 'BI Homeopathic',
-      description:
-        'Standardized homeopathic medicines, herbal wellness products, and preventive health solutions trusted by families nationwide.',
-      image: '/vertical-wellness-card.jpg',
-      href: '#wellness',
-    },
-    {
-      category: 'Agri-Technology',
-      title: 'BI Agriculture',
-      description:
-        'Sustainable crop nutrition, organic bio-fertilizers, and high-yield farming practices designed to empower Indian agriculture.',
-      image: '/category-agriculture.jpg',
-      href: '#agriculture',
-    },
-    {
-      category: 'Heavy Infrastructure',
-      title: 'BI Engineering',
-      description:
-        'Turnkey heavy steel fabrication, precision structural assemblies, and industrial infrastructure services engineered to highest tolerances.',
-      image: '/division-fabrication.png',
-      href: '#engineering',
-    },
-  ];
+const BUSINESSES = [
+  {
+    title: "BI Painting Solution",
+    description:
+      "BI Group has many different types of interior and exterior paint, creating colour combinations and design ideas for every home.",
+    image: "/category-painting.jpg",
+    href: "/products/paints",
+  },
+  {
+    title: "BI Modular Kitchen",
+    description:
+      "Modern modular kitchen and interior solutions combining functionality, design, and everyday convenience for your dream home.",
+    image: "/category-kitchen.jpg",
+    href: "/products",
+  },
+  {
+    title: "BI Electronics",
+    description:
+      "Innovative electronic components, air conditioning systems, and smart technology solutions for modern living and industrial automation.",
+    image: "/category-electronics.jpg",
+    href: "/products",
+  },
+  {
+    title: "BI Homeopathic",
+    description:
+      "Natural and holistic homeopathic healthcare products, remedies, and wellness solutions trusted by families across India.",
+    image: "/category-homeopathic.jpg",
+    href: "/products",
+  },
+  {
+    title: "BI Agriculture",
+    description:
+      "Explore innovative agricultural solutions, advanced farming techniques, and sustainable practices—designed to boost productivity and nurture growth.",
+    image: "/category-agriculture.jpg",
+    href: "/products",
+  },
+  {
+    title: "BI Engineering",
+    description:
+      "Delivering precision engineering services, industrial solutions, and infrastructure development—built to power progress and drive innovation.",
+    image: "/category-engineering.jpg",
+    href: "/products",
+  },
+];
 
+function BusinessCard({ business }) {
   return (
-    <section id="businesses" className="bg-white py-6 sm:py-7 lg:py-8 scroll-mt-14">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 space-y-5 sm:space-y-6">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto space-y-1.5">
-          <div className="inline-flex items-center gap-2">
-            <span className="w-6 h-[2px] bg-[#c8963e]" />
-            <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#c8963e]">
-              One Group. Multiple Possibilities.
-            </p>
-            <span className="w-6 h-[2px] bg-[#c8963e]" />
+    <motion.div variants={cardUp} whileHover={hoverLiftCard}>
+      <a
+        href={business.href}
+        className="group flex flex-col h-full overflow-hidden bg-white cursor-pointer"
+        style={{ border: "1px solid #eaeaea", borderRadius: 12, boxShadow: "0px 4px 12px rgba(15,31,61,0.05)" }}
+      >
+        <div className="relative w-full overflow-hidden" style={{ height: 240 }}>
+          <ScrollRevealImage>
+            <img
+              src={business.image}
+              alt={business.title}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+          </ScrollRevealImage>
+        </div>
+        <div className="flex flex-col items-start justify-center bg-white" style={{ gap: 12, padding: 20, height: 140 }}>
+          <div className="flex items-center justify-between w-full">
+            <h3 style={{ fontWeight: 700, fontSize: 18, margin: 0, fontFamily: "var(--font-serif)" }}>{business.title}</h3>
+            <ArrowRight size={16} className="shrink-0 text-brand transition-transform duration-300 group-hover:translate-x-1" />
           </div>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0f1f3d] font-serif">
-            Different Businesses. One Shared Purpose.
-          </h2>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-sans max-w-2xl mx-auto">
-            BI Group brings together specialized business verticals that engineer, build, and safeguard spaces.
-            Combining innovation, international certifications, and unwavering commitment.
-          </p>
+          <p style={{ fontWeight: 400, fontSize: 13, lineHeight: 1.5, color: "#666", margin: 0 }}>{business.description}</p>
         </div>
-
-        {/* 6 Category Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-          {businesses.map((biz) => (
-            <a
-              key={biz.title}
-              href={biz.href}
-              className="group flex flex-col bg-white rounded-2xl overflow-hidden border border-slate-200/80 shadow-xs hover:shadow-xl transition-all duration-500 hover:-translate-y-1.5 relative"
-            >
-              {/* Photo Box with Smooth Scale on Hover */}
-              <div className="relative h-36 sm:h-40 overflow-hidden bg-slate-100">
-                <img
-                  src={biz.image}
-                  alt={biz.title}
-                  className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-108"
-                  loading="lazy"
-                />
-                
-                {/* Gradient vignette for badge readability */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20" />
-
-                {/* Category Pill Floating Badge */}
-                <div className="absolute top-3 left-3 z-10">
-                  <span className="bg-white/95 backdrop-blur-md text-[#0f1f3d] text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full shadow-xs">
-                    {biz.category}
-                  </span>
-                </div>
-              </div>
-
-              {/* Text Description Box */}
-              <div className="p-4 sm:p-4.5 flex flex-col justify-between flex-1 bg-white space-y-2">
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between gap-2">
-                    <h3 className="text-base sm:text-lg font-bold text-[#0f1f3d] font-serif group-hover:text-[#1a5276] transition-colors">
-                      {biz.title}
-                    </h3>
-                    <div className="w-6 h-6 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 group-hover:bg-[#1a5276] group-hover:text-white transition-all duration-300 flex-shrink-0">
-                      <ArrowRight size={13} className="transition-transform duration-300 group-hover:translate-x-0.5" />
-                    </div>
-                  </div>
-                  <p className="text-xs text-gray-600 leading-relaxed font-sans line-clamp-2">
-                    {biz.description}
-                  </p>
-                </div>
-
-                <div className="pt-2 border-t border-slate-100 flex items-center gap-1.5 text-xs font-semibold text-[#1a5276] group-hover:text-[#c8963e] transition-colors">
-                  <span>Explore Vertical</span>
-                  <ExternalLink size={12} />
-                </div>
-              </div>
-            </a>
-          ))}
-        </div>
-
-        {/* View All Businesses CTA Button */}
-        <div className="flex justify-center pt-1">
-          <a
-            href="#businesses"
-            className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full border-2 border-[#1b1b2f] text-[#1b1b2f] hover:bg-[#1b1b2f] hover:text-white transition-all duration-300 text-xs sm:text-sm font-bold tracking-wider uppercase cursor-pointer"
-          >
-            <span>Explore All 7 Business Verticals</span>
-            <ArrowRight size={14} />
-          </a>
-        </div>
-      </div>
-    </section>
+      </a>
+    </motion.div>
   );
 }
 
-export default BusinessPortfolio;
+export default function BusinessPortfolio() {
+  return (
+    <section id="businesses" className="bg-white" style={{ paddingTop: 100, paddingBottom: 100 }}>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={staggerContainer(0.15)}
+        className="flex flex-col items-center px-6 sm:px-10 lg:px-35"
+        style={{ gap: 56 }}
+      >
+        <motion.div variants={fadeUp} className="flex flex-col items-center text-center w-full" style={{ gap: 14, maxWidth: 960 }}>
+          <span className="font-inter uppercase" style={{ fontWeight: 700, fontSize: 13, letterSpacing: "2px", color: "#c8963e" }}>
+            One Group. Multiple Possibilities.
+          </span>
+          <h2 style={{ fontSize: 37, fontWeight: 700, fontFamily: "var(--font-serif)" }}>Different businesses. One shared purpose.</h2>
+          <p style={{ fontSize: 15, lineHeight: 1.6, color: "#555" }}>
+            BI Group brings together businesses that help people build, improve and protect the spaces around
+            them. From paints and coatings to modular interiors and specialized services, we combine quality,
+            innovation and customer-focused solutions.
+          </p>
+        </motion.div>
+
+        <motion.div variants={staggerContainer(0.08)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full" style={{ gap: 24 }}>
+          {BUSINESSES.map((b) => (
+            <BusinessCard key={b.title} business={b} />
+          ))}
+        </motion.div>
+
+        <motion.div variants={fadeUp} whileHover={{ ...hoverScaleButton, transition: hoverTransition }} whileTap={{ ...tapScaleButton, transition: hoverTransition }}>
+          <a
+            href="/businesses"
+            className="inline-flex items-center rounded-full cursor-pointer"
+            style={{ gap: 10, padding: "14px 28px", border: "1.5px solid #1b1b2f" }}
+          >
+            <span style={{ fontWeight: 600, fontSize: 15, color: "#1b1b2f" }}>View All Businesses</span>
+            <ArrowRight size={16} className="text-[#1b1b2f]" />
+          </a>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}

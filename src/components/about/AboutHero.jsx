@@ -12,7 +12,7 @@ import React from 'react';
 function AboutHero() {
   return (
     <section className="font-inter pt-[70px] scroll-mt-[70px]">
-      <div className="relative w-full overflow-hidden h-[200px] sm:h-[250px] lg:h-[290px]">
+      <div className="relative w-full overflow-hidden h-[500px] sm:h-[500px] lg:h-[500px]">
         {/* Background Image Container */}
         <div className="absolute inset-0">
           <img

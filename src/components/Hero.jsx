@@ -1,284 +1,219 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { ChevronLeft, ChevronRight, ArrowRight, Sparkles } from 'lucide-react';
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import { passThroughVariants, TypingReveal } from "./TypingReveal";
+import { EASE_OUT, hoverScaleButton, hoverTransition, tapScaleButton } from "../lib/motion";
 
-/**
- * SLIDES_DATA: Master data-driven configuration for Homepage Hero Slider.
- * 
- * To add, edit, remove, or reorder slides in the future:
- * Simply modify this array. Each slide accepts:
- * - id: unique number or string
- * - tag: Category pill / business vertical name (e.g., 'Bi Painting Solution')
- * - title: Main hero heading
- * - description: Detailed supporting description
- * - image: Path to image in /public folder (e.g., '/slider-painting.png')
- * - primaryCta: Text for the primary golden button (optional)
- * - primaryLink: Target anchor or URL (e.g., '#businesses', '#kitchens')
- * - secondaryCta: Text for secondary glassmorphic button (optional)
- * - secondaryLink: Target anchor or URL (optional)
- */
-export const SLIDES_DATA = [
+const AUTOPLAY_MS = 6000;
+
+const textGroupVariants = {
+  hidden: {},
+  visible: {},
+  exit: { opacity: 0, transition: { duration: 0.5, ease: EASE_OUT } },
+};
+
+const buttonVariants = {
+  hidden: { opacity: 0, y: 15 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE_OUT, delay: 2.5 } },
+};
+
+const SLIDES = [
   {
-    id: 1,
-    tag: 'Bi Painting Solution',
-    title: 'Elevating Spaces Through Color',
+    // Figma: hero-carousel-banner, node 3900:222 — slide-paints (default slide)
+    title: "Transforming Spaces with Color",
     description:
-      'BI Group offers a premium range of interior and exterior paints, inspiring stunning color combinations and tailored design concepts for every home.',
-    image: '/slider-painting.png',
-    link: '#businesses',
-  },
-  {
-    id: 2,
-    tag: 'Bi Modular Kitchen',
-    title: 'Smarter Kitchens. Inspired Living.',
-    description:
-      'Seamlessly blending modern aesthetics, intelligent storage, and everyday convenience, BI Group crafts bespoke kitchen and interior solutions tailored to your dream home.',
-    image: '/slider-kitchen.png',
-    link: '#kitchens',
-  },
-  {
-    id: 3,
-    tag: 'Bi Electronics',
-    title: 'Empowering Connectivity. Elevating Everyday Comfort.',
-    description:
-      'Delivering advanced electronic components, efficient climate control systems, and cutting-edge smart technology designed to seamlessly transform modern homes and drive industrial automation.',
-    image: '/slider-electronics.png',
-    link: '#businesses',
-  },
-  {
-    id: 4,
-    tag: 'Bi Homeopathic',
-    title: 'Pure Healing. Everyday Family Wellness.',
-    description:
-      'Combining time-tested natural remedies with holistic care, BI Group delivers safe, gentle, and effective homeopathic solutions trusted by families nationwide for lifelong health.',
-    image: '/slider-homeopathic.png',
-    link: '#businesses',
-  },
-  {
-    id: 5,
-    tag: 'Bi Agriculture',
-    title: 'Cultivating Innovation. Sustaining Future Harvests.',
-    description:
-      'Empowering farmers with advanced techniques, cutting-edge technology, and eco-friendly practices designed to maximize crop yield, protect soil health, and drive sustainable agricultural growth.',
-    image: '/slider-agriculture.png',
-    link: '#sustainability',
-  },
-  {
-    id: 6,
-    tag: 'Bi Engineering',
-    title: 'Precision Engineering. Powering Industrial Progress.',
-    description:
-      'Delivering high-performance engineering solutions, advanced industrial capabilities, and resilient infrastructure development engineered to drive innovation, optimize performance, and shape sustainable progress.',
-    image: '/slider-engineering.jpg',
-    link: '#businesses',
+      "A modern palette for architects, builders, and homeowners-crafted for performance, sustainability, and timeless beauty.",
+    image: "/hero-slide-paints.jpg",
   },
 ];
 
-const AUTOPLAY_INTERVAL_MS = 5000; // 5 seconds autoplay
+export default function Hero() {
+  const [index, setIndex] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const timer = useRef(null);
 
-function Hero() {
-  const [currentSlide, setCurrentSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
-  const touchStartXRef = useRef(null);
+  const next = useCallback(() => setIndex((i) => (i + 1) % SLIDES.length), []);
+  const prev = useCallback(() => setIndex((i) => (i - 1 + SLIDES.length) % SLIDES.length), []);
 
-  const nextSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev + 1) % SLIDES_DATA.length);
-  }, []);
-
-  const prevSlide = useCallback(() => {
-    setCurrentSlide((prev) => (prev - 1 + SLIDES_DATA.length) % SLIDES_DATA.length);
-  }, []);
-
-  const goToSlide = useCallback((index) => {
-    setCurrentSlide(index);
-  }, []);
-
-  // Autoplay timer with pause support and cleanup
   useEffect(() => {
-    if (isPaused) return;
-    const interval = setInterval(() => {
-      nextSlide();
-    }, AUTOPLAY_INTERVAL_MS);
-
-    return () => clearInterval(interval);
-  }, [isPaused, nextSlide]);
-
-  // Keyboard navigation support (accessibility)
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === 'ArrowLeft') {
-        prevSlide();
-      } else if (e.key === 'ArrowRight') {
-        nextSlide();
-      }
+    if (paused || SLIDES.length < 2) return;
+    timer.current = setInterval(next, AUTOPLAY_MS);
+    return () => {
+      if (timer.current) clearInterval(timer.current);
     };
-    window.addEventListener('keydown', handleKeyDown);
-    return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [nextSlide, prevSlide]);
+  }, [paused, next]);
 
-  // Touch gesture handlers for mobile devices
-  const handleTouchStart = (e) => {
-    setIsPaused(true);
-    touchStartXRef.current = e.touches[0].clientX;
-  };
-
-  const handleTouchEnd = (e) => {
-    setIsPaused(false);
-    if (touchStartXRef.current === null) return;
-    const touchEndX = e.changedTouches[0].clientX;
-    const diff = touchStartXRef.current - touchEndX;
-
-    // Minimum 50px delta to trigger swipe
-    if (diff > 50) {
-      nextSlide();
-    } else if (diff < -50) {
-      prevSlide();
-    }
-    touchStartXRef.current = null;
-  };
-
-  const active = SLIDES_DATA[currentSlide];
+  const slide = SLIDES[index];
 
   return (
     <section
       id="home"
-      role="region"
-      aria-roledescription="carousel"
-      aria-label="BI Group Business Verticals Showcase"
-      className="relative w-full overflow-hidden pt-[70px] bg-slate-950 select-none h-[550px] sm:h-550px] md:h-[550px] lg:h-[550px] scroll-mt-[70px]"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-      onFocus={() => setIsPaused(true)}
-      onBlur={() => setIsPaused(false)}
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
+      className="font-inter select-none"
+      style={{ paddingTop: "var(--header-height)" }}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
     >
-      {/* 1. Background Image Carousel with Smooth Cross-Fade */}
-      {SLIDES_DATA.map((slide, idx) => {
-        const isCurrent = idx === currentSlide;
-        return (
-          <div
-            key={slide.id}
-            aria-hidden={!isCurrent}
-            className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-              isCurrent ? 'opacity-100 z-10' : 'opacity-0 z-0 pointer-events-none'
-            }`}
+      {/* Figma: hero-carousel-banner, node 2276:237 — height 578px */}
+      <div className="relative w-full overflow-hidden" style={{ height: 578 }}>
+        <AnimatePresence mode="sync">
+          <motion.div
+            key={index}
+            initial={{ opacity: 0, scale: 1.04 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 1, ease: EASE_OUT }}
+            className="absolute inset-0"
           >
+            {slide.fit === "contain" && (
+              <img
+                src={slide.image}
+                alt=""
+                aria-hidden="true"
+                className="absolute inset-0 w-full h-full object-cover scale-110 blur-2xl"
+                style={{ opacity: 0.7 }}
+              />
+            )}
             <img
               src={slide.image}
               alt={slide.title}
-              className={`w-full h-full object-cover object-center transition-transform duration-7000 ease-out ${
-                isCurrent ? 'scale-105' : 'scale-100'
-              }`}
-              loading={idx === 0 ? 'eager' : 'lazy'}
+              className={`absolute inset-0 w-full h-full ${slide.fit === "contain" ? "object-contain" : "object-cover"}`}
+              style={slide.fit === "contain" ? { objectPosition: "right center" } : undefined}
             />
-
-            {/* Premium Dual-Gradient Overlay for Superior Contrast & Readability */}
+            {/* Figma gradient: linear-gradient(90deg, rgba(10,10,26,.32) 0%, rgba(10,10,26,.15) 50%, rgba(10,10,26,.28) 100%) */}
             <div
               className="absolute inset-0"
               style={{
                 background:
-                  'linear-gradient(90deg, rgba(15, 31, 61, 0.94) 0%, rgba(15, 31, 61, 0.82) 42%, rgba(15, 31, 61, 0.40) 78%, rgba(15, 31, 61, 0.20) 100%)',
+                  "linear-gradient(90deg, rgba(10,10,26,0.32) 0%, rgba(10,10,26,0.15) 50%, rgba(10,10,26,0.28) 100%)",
               }}
             />
+          </motion.div>
+        </AnimatePresence>
 
-            {/* Mobile Vertical Gradient: Ensures optimal readability when stacked */}
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/90 via-slate-950/40 to-transparent sm:hidden" />
-
-            {/* Bottom Vignette for seamless blend with TrustMetrics bar */}
-            <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-slate-950/70 to-transparent" />
-          </div>
-        );
-      })}
-
-      {/* 2. Slide Content Area (Synchronized with current slide) */}
-      <div className="relative z-20 h-full max-w-7xl mx-auto px-5 sm:px-10 lg:px-16 flex items-center">
-        <div className="max-w-xl lg:max-w-2xl text-white space-y-2.5 sm:space-y-3 pt-1 pb-8 sm:pb-0">
-          
-          {/* Business Vertical Pill Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[11px] sm:text-xs font-semibold tracking-wider uppercase text-amber-300 shadow-sm animate-fadeIn">
-            <Sparkles size={13} className="text-amber-400" />
-            <span>{active.tag}</span>
-          </div>
-
-          {/* Main Slide Heading with DM Serif Display (Shorter height and width) */}
-          <h1
-            key={`title-${active.id}`}
-            className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-[40px] font-normal leading-[1.2] tracking-tight font-dm-serif font-serif text-white drop-shadow-md max-w-lg lg:max-w-xl animate-fadeIn"
-          >
-            {active.title}
-          </h1>
-
-          {/* Slide Description Paragraph (Shorter height and width) */}
-          <p
-            key={`desc-${active.id}`}
-            className="text-xs sm:text-sm md:text-[14.5px] text-slate-200/90 leading-normal sm:leading-relaxed font-sans max-w-md sm:max-w-lg lg:max-w-xl drop-shadow-sm animate-fadeIn"
-          >
-            {active.description}
-          </p>
-
-          {/* Call-To-Action Button: Single 'Read More' Button with Yellow Accent */}
-          <div className="pt-1.5 sm:pt-2">
-            <a
-              href={active.link || '#businesses'}
-              className="inline-flex items-center justify-center gap-2 px-[18px] py-[8px] h-[36px] rounded-full font-semibold text-[13px] sm:text-[14px] tracking-wider uppercase border border-[#c8963e] text-[#c8963e] hover:bg-[#c8963e] hover:text-[#0f1f3d] bg-black/25 backdrop-blur-sm shadow-md shadow-black/20 hover:shadow-lg hover:shadow-[#c8963e]/20 transition-all duration-300 ease-in-out group cursor-pointer hover:-translate-y-0.5 whitespace-nowrap text-center"
+        {/* hero-text, node 4011:196: left-136, top calc(50% + 135px), width 760 */}
+        <div
+          className="absolute left-6 right-6 sm:left-10 sm:right-10 lg:right-auto lg:left-35 z-20"
+          style={{ top: "calc(50% + 135px)", transform: "translateY(-50%)", width: 760, maxWidth: "100%" }}
+        >
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={index}
+              variants={textGroupVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              className="flex flex-col"
+              style={{ gap: 20 }}
             >
-              <span>Read More</span>
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-300 group-hover:translate-x-1 text-[#c8963e] group-hover:text-[#0f1f3d]"
-              />
-            </a>
-          </div>
+              {/* hero-text: gap-16 */}
+              <div className="flex flex-col" style={{ gap: 16 }}>
+                {slide.eyebrow && (
+                  <motion.p
+                    variants={passThroughVariants}
+                    className="uppercase"
+                    style={{
+                      fontWeight: 700,
+                      fontSize: 14,
+                      letterSpacing: "1.12px",
+                      color: "rgba(255,255,255,0.8)",
+                      lineHeight: "normal",
+                    }}
+                  >
+                    <TypingReveal text={slide.eyebrow} split="letter" charDelay={0.03} charDuration={0.35} baseDelay={0} />
+                  </motion.p>
+                )}
+                <motion.h1
+                  variants={passThroughVariants}
+                  style={{
+                    fontSize: 32,
+                    lineHeight: 1.3,
+                    letterSpacing: "1px",
+                    color: "#ffffff",
+                    fontFamily: "var(--font-serif)",
+                    fontWeight: 700,
+                  }}
+                >
+                  <TypingReveal text={slide.title} split="letter" charDelay={0.018} charDuration={0.4} baseDelay={0.35} />
+                </motion.h1>
+                <motion.p
+                  variants={passThroughVariants}
+                  style={{
+                    fontWeight: 400,
+                    fontSize: 15,
+                    lineHeight: 1.5,
+                    color: "rgba(255,255,255,0.8)",
+                  }}
+                >
+                  <TypingReveal text={slide.description} split="word" charDelay={0.06} charDuration={0.45} baseDelay={1.1} />
+                </motion.p>
+              </div>
+
+              {slide.cta && slide.href && (
+                <motion.div
+                  variants={buttonVariants}
+                  whileHover={{ ...hoverScaleButton, transition: hoverTransition }}
+                  whileTap={{ ...tapScaleButton, transition: hoverTransition }}
+                  className="w-fit"
+                >
+                  <a
+                    href={slide.href}
+                    className="group inline-flex items-center w-fit rounded-full bg-white"
+                    style={{
+                      gap: 12,
+                      padding: "14px 18px",
+                      boxShadow: "0px 10px 12px rgba(0,0,0,0.15)",
+                    }}
+                  >
+                    <span style={{ fontWeight: 800, fontSize: 15, color: "#0a1628" }}>{slide.cta}</span>
+                    <ArrowRight size={18} className="text-[#0a1628] transition-transform duration-300 group-hover:translate-x-1" />
+                  </a>
+                </motion.div>
+              )}
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
 
-      {/* 3. Previous Navigation Arrow Button */}
-      <button
-        onClick={prevSlide}
-        aria-label="Previous Slide"
-        className="absolute left-3 sm:left-6 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-[#1a5276] text-white backdrop-blur-md border border-white/20 transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
-      >
-        <ChevronLeft size={22} />
-      </button>
-
-      {/* 4. Next Navigation Arrow Button */}
-      <button
-        onClick={nextSlide}
-        aria-label="Next Slide"
-        className="absolute right-3 sm:right-6 top-1/2 -translate-y-1/2 z-30 flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 hover:bg-[#1a5276] text-white backdrop-blur-md border border-white/20 transition-all duration-200 shadow-xl cursor-pointer hover:scale-105 active:scale-95"
-      >
-        <ChevronRight size={22} />
-      </button>
-
-      {/* 5. Pagination Indicators & Slide Progress */}
-      <div className="absolute bottom-5 sm:bottom-7 left-1/2 -translate-x-1/2 z-30 flex items-center gap-2 sm:gap-3 bg-black/40 backdrop-blur-md px-3.5 sm:px-4 py-1.5 sm:py-2 rounded-full border border-white/15 shadow-lg">
-        {SLIDES_DATA.map((s, idx) => {
-          const isCurrent = idx === currentSlide;
-          return (
+        {/* Arrows */}
+        {SLIDES.length >= 1 && (
+          <>
             <button
-              key={s.id}
-              onClick={() => goToSlide(idx)}
-              aria-label={`Go to slide ${idx + 1}: ${s.tag}`}
-              aria-current={isCurrent ? 'true' : 'false'}
-              className="flex items-center cursor-pointer group py-1"
+              aria-label="Previous slide"
+              onClick={prev}
+              className="hidden sm:flex absolute left-5 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/30 backdrop-blur-sm z-30 cursor-pointer"
+              style={{ transition: "background-color 0.2s ease-in-out" }}
             >
-              <span
-                className={`block transition-all duration-300 rounded-full ${
-                  isCurrent
-                    ? 'w-6 sm:w-8 h-2 sm:h-2.5 bg-[#c8963e]'
-                    : 'w-2 sm:w-2.5 h-2 sm:h-2.5 bg-white/40 group-hover:bg-white/80'
-                }`}
-              />
+              <ChevronLeft size={20} />
             </button>
-          );
-        })}
-        {/* Slide Counter (e.g., 01 / 06) */}
-        <span className="text-[11px] sm:text-xs font-semibold text-white/80 pl-1.5 tabular-nums">
-          0{currentSlide + 1} / 0{SLIDES_DATA.length}
-        </span>
+            <button
+              aria-label="Next slide"
+              onClick={next}
+              className="hidden sm:flex absolute right-5 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/30 backdrop-blur-sm z-30 cursor-pointer"
+              style={{ transition: "background-color 0.2s ease-in-out" }}
+            >
+              <ChevronRight size={20} />
+            </button>
+          </>
+        )}
+
+        {/* hero-dots, node 2276:247 — bottom-48, gap-8, active 24x8, inactive 8x8, rounded-4 */}
+        <div className="absolute left-1/2 -translate-x-1/2 flex items-center z-30" style={{ bottom: 48, gap: 8 }}>
+          {SLIDES.map((s, i) => (
+            <button
+              key={s.title}
+              aria-label={`Go to slide ${i + 1}`}
+              onClick={() => setIndex(i)}
+              className="cursor-pointer"
+              style={{
+                height: 8,
+                width: i === index ? 24 : 8,
+                borderRadius: 4,
+                background: i === index ? "#ffffff" : "rgba(255,255,255,0.4)",
+                transition: "all 0.3s ease-in-out",
+              }}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );
 }
-
-export default Hero;

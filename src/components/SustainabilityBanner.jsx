@@ -1,88 +1,90 @@
-import React from 'react';
-import { ArrowRight, Leaf, Shield, Award } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
+import {
+  fadeUp,
+  fadeUpSmall,
+  hoverScaleButton,
+  hoverTransition,
+  staggerContainer,
+  tapScaleButton,
+  viewportOnce,
+} from "../lib/motion";
 
-/**
- * SustainabilityBanner Component
- * Senior UI/UX Redesign: Deep corporate ocean gradient, sustainable badges,
- * and high-contrast typography emphasizing environmental stewardship.
- */
-function SustainabilityBanner() {
-  const pillars = [
-    { icon: Leaf, title: 'Low VOC & Waterborne', desc: 'Zero harmful emissions' },
-    { icon: Shield, title: 'Non-Toxic Formulations', desc: 'Free of lead & heavy metals' },
-    { icon: Award, title: 'Green Pro Certified', desc: 'Sustainable manufacturing' },
-  ];
-
+export default function SustainabilityBanner() {
   return (
-    <section id="sustainability" className="relative overflow-hidden w-full min-h-[290px] sm:min-h-[310px] lg:min-h-[330px] flex items-center scroll-mt-14">
-      {/* Anchor for BI Foundation navbar link */}
-      <span id="foundation" className="absolute top-0 -mt-14 pointer-events-none" />
-
-      {/* Background Image */}
+    // Figma: bi-sustainability-banner, node 3900:462, px-140 py-64
+    <section id="sustainability" className="relative overflow-hidden w-full flex flex-col justify-center px-6 sm:px-10 lg:px-35 py-16" style={{ minHeight: 560 }}>
       <img
         src="/sustainability-banner-2.jpg"
-        alt="BI Group Sustainability"
-        className="absolute inset-0 w-full h-full object-cover object-center"
+        alt="BI Group sustainability"
+        className="absolute inset-0 w-full h-full object-cover"
       />
-
-      {/* Deep Ocean Navy Gradient */}
       <div
         className="absolute inset-0"
         style={{
-          background:
-            'linear-gradient(90deg, rgba(11, 45, 91, 0.94) 0%, rgba(11, 45, 91, 0.85) 45%, rgba(11, 45, 91, 0.3) 85%)',
+          background: "linear-gradient(90deg, rgba(11,45,91,0.8) 0%, rgba(11,45,91,0.7) 40%, rgba(11,45,91,0) 75%)",
         }}
       />
 
-      {/* Content Container */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 w-full py-6 sm:py-7 lg:py-8">
-        <div className="max-w-2xl text-white space-y-3 sm:space-y-3.5">
-          
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-[10.5px] sm:text-xs font-bold uppercase tracking-widest text-emerald-300">
-            <Leaf size={12} className="text-emerald-400" />
-            <span>Sustainable Future</span>
-          </div>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={staggerContainer(0.12)}
+        className="relative flex flex-col items-start"
+        style={{ gap: 24, width: 640, maxWidth: "100%" }}
+      >
+        <div className="flex flex-col items-start w-full" style={{ gap: 20 }}>
+          <motion.span
+            variants={fadeUpSmall}
+            className="font-inter uppercase w-full"
+            style={{ fontWeight: 700, fontSize: 11, letterSpacing: "2px", color: "rgba(255,255,255,0.8)" }}
+          >
+            At BI Group, we are driven by a purpose to build and protect India&apos;s future
+          </motion.span>
 
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold font-serif leading-[1.15]">
-            Protecting Surfaces, Preserving the Future
-          </h2>
+          <motion.div
+            variants={fadeUp}
+            className="w-full"
+            style={{ fontFamily: "var(--font-pt-serif)", fontWeight: 700, fontSize: 28, letterSpacing: "-1.5px", color: "#ffffff" }}
+          >
+            <p style={{ lineHeight: 1.2, margin: 0 }}>Protecting Surfaces,</p>
+            <p style={{ lineHeight: 1.2, margin: 0 }}>Preserving the Future</p>
+          </motion.div>
 
-          <p className="text-xs sm:text-sm text-slate-200 leading-relaxed font-sans max-w-xl">
-            Together with our partners, industrial clients, and communities, we are committed to engineering
-            low-emission coatings and circular manufacturing processes that build sustainable infrastructure
-            without compromising durability.
-          </p>
-
-          {/* 3 Pillar Micro Badges */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-1">
-            {pillars.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.title} className="p-2.5 sm:p-3 rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
-                  <Icon size={16} className="text-emerald-300 mb-1" />
-                  <p className="text-xs font-bold text-white">{item.title}</p>
-                  <p className="text-[10.5px] text-slate-300">{item.desc}</p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="pt-1">
-            <a
-              href="#sustainability"
-              className="inline-flex items-center gap-2 px-5 sm:px-6 py-2.5 rounded-full bg-white text-[#0b2d5b] hover:bg-[#c8963e] hover:text-white transition-all duration-300 text-xs sm:text-sm font-bold tracking-wide shadow-md group"
-            >
-              <span>Explore Sustainability Initiatives</span>
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-300 group-hover:translate-x-1"
-              />
-            </a>
-          </div>
+          <motion.p
+            variants={fadeUp}
+            className="w-full"
+            style={{ fontWeight: 400, fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.85)" }}
+          >
+            Together with our partners and customers, we are committed to delivering
+            world-class coatings and solutions that protect infrastructure, empower
+            industries, and contribute to a sustainable tomorrow.
+          </motion.p>
         </div>
-      </div>
+
+        <motion.div
+          variants={fadeUpSmall}
+          whileHover={{ ...hoverScaleButton, transition: hoverTransition }}
+          whileTap={{ ...tapScaleButton, transition: hoverTransition }}
+        >
+          <a
+            href="/sustainability"
+            className="group inline-flex items-center justify-center text-white hover:bg-white hover:text-ink-dark cursor-pointer"
+            style={{
+              gap: 10,
+              border: "1px solid #ffffff",
+              padding: "14px 28px",
+              borderRadius: 999,
+              transition: "all 0.25s ease-in-out",
+            }}
+          >
+            <span style={{ fontWeight: 600, fontSize: 13 }}>Read more about Sustainability</span>
+            <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
+          </a>
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
-
-export default SustainabilityBanner;

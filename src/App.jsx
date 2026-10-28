@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import TrustMetrics from './components/TrustMetrics';
 import ImpactVision from './components/ImpactVision';
 import FeatureCards from './components/FeatureCards';
 import BusinessPortfolio from './components/BusinessPortfolio';
+import CareerBanner from './components/CareerBanner';
 import KitchenShowcase from './components/KitchenShowcase';
 import SustainabilityBanner from './components/SustainabilityBanner';
-import Partners from './components/Partners';
 import NewsInsights from './components/NewsInsights';
-import CareerBanner from './components/CareerBanner';
+import Partners from './components/Partners';
 import Footer from './components/Footer';
 import AboutPage from './components/AboutPage';
 
@@ -159,38 +158,34 @@ function App() {
           /* About Page Flow (Recreated 1:1 matching bipaints.netlify.app/about) */
           <AboutPage />
         ) : (
-          /* Homepage Flow */
+          /* Homepage Flow - Exactly matching biGroup upstream/main & bipaints.netlify.app */
           <>
-            {/* 2. Hero Section: Functional high-res photo carousel with dual CTAs */}
+            {/* 1. Hero Carousel */}
             <Hero />
 
-
-            {/* 4. Company Vision & Reach: "Creating Excellence" with skyline illustration */}
+            {/* 2. Impact & Vision */}
             <ImpactVision />
-            
-            {/* 3. Trust & Credibility Metrics: Key operational statistics */}
-            <TrustMetrics />
 
-            {/* 5. Solutions Feature Cards: 3 core service pillars */}
+            {/* 3. Feature Cards Solutions */}
             <FeatureCards />
 
-            {/* 6. Multi-Industry Portfolio: 6 core verticals with image hover cards */}
+            {/* 4. Business Portfolio Grid */}
             <BusinessPortfolio />
 
-            {/* 7. Signature Living Showcase: BI Modular Kitchens & Interiors */}
+            {/* 5. Career Banner */}
+            <CareerBanner />
+
+            {/* 6. Modular Kitchen Showcase */}
             <KitchenShowcase />
 
-            {/* 8. Sustainability Commitment: Ocean gradient & environmental certifications */}
+            {/* 7. Sustainability Banner */}
             <SustainabilityBanner />
 
-            {/* 9. Institutional Validation: Trusted enterprise client logos */}
-            <Partners />
-
-            {/* 10. News & Case Studies: Recent engineering & coating milestones */}
+            {/* 8. News & Insights */}
             <NewsInsights />
 
-            {/* 11. Career Banner: Team culture & hiring invitations */}
-            <CareerBanner />
+            {/* 9. Trusted Partners */}
+            <Partners />
           </>
         )}
       </main>

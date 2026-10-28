@@ -1,118 +1,85 @@
-import React from 'react';
-import { ArrowRight, PaintBucket, ShieldCheck, Building2 } from 'lucide-react';
+import React from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Building2, PaintBucket, ShieldCheck } from "lucide-react";
+import { cardUp, fadeUp, staggerContainer, viewportOnce } from "../lib/motion";
 
-/**
- * FeatureCards Component ("Explore Our Solutions")
- * Senior UI/UX Redesign: Card elevation, subtle border glow,
- * category badges, and interactive hover feedback.
- */
-function FeatureCards() {
-  const cards = [
-    {
-      icon: PaintBucket,
-      tag: 'Product Catalog',
-      title: 'Explore Our Coatings',
-      description:
-        "Browse BI Group's comprehensive range of industrial, automotive, and architectural decorative coatings. Find the right protective formulation for your exact substrate.",
-      linkText: 'Find the right coating',
-      href: '#products',
-      accentColor: 'from-blue-500/10 to-transparent',
-    },
-    {
-      icon: ShieldCheck,
-      tag: 'Expert Advisory',
-      title: 'Custom Coating Solutions',
-      description:
-        'Get tailored high-performance coating systems built for severe chemical, thermal, and marine exposure. Our technical advisors match the optimal chemistry to your project.',
-      linkText: 'Request a consultation',
-      href: '#contact',
-      accentColor: 'from-amber-500/10 to-transparent',
-    },
-    {
-      icon: Building2,
-      tag: 'Group Profile',
-      title: 'Discover BI Group',
-      description:
-        'Your integrated multi-sector resource for coatings, modular lifestyle kitchens, HVAC appliances, and heavy structural engineering services across India.',
-      linkText: 'Learn more about group',
-      href: '#about',
-      accentColor: 'from-emerald-500/10 to-transparent',
-    },
-  ];
+const CARDS = [
+  {
+    icon: PaintBucket,
+    title: "Explore Our Coatings",
+    description:
+      "Browse BI Group's comprehensive range of industrial and decorative coatings. Find the right product for your specific application needs.",
+    linkText: "Find the right coating",
+    href: "/products/paints",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Custom Coating Solutions",
+    description:
+      "Get tailored coating systems designed for your unique requirements. Our experts match the optimal solution to your project specifications.",
+    linkText: "Get a consultation",
+    href: "/contact",
+  },
+  {
+    icon: Building2,
+    title: "Discover BI Group",
+    description:
+      "Your complete resource for coatings, modular interiors, and engineering services. Explore our integrated business verticals.",
+    linkText: "Learn more",
+    href: "/about",
+  },
+];
 
+// Figma: feature-cards-section, node 4128:220
+export default function FeatureCards() {
   return (
-    <section id="ecommerce" className="bg-slate-100/70 py-6 sm:py-7 lg:py-8 relative scroll-mt-14">
-      <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 space-y-5 sm:space-y-6">
-        
-        {/* Section Header */}
-        <div className="text-center max-w-2xl mx-auto space-y-1.5">
-          <p className="text-xs sm:text-sm font-bold uppercase tracking-[0.2em] text-[#c8963e]">
+    <section id="solutions" style={{ background: "#f5f5f5", paddingTop: 80, paddingBottom: 96 }}>
+      <motion.div
+        initial="hidden"
+        whileInView="visible"
+        viewport={viewportOnce}
+        variants={staggerContainer(0.15)}
+        className="flex flex-col items-center px-6 sm:px-10 lg:px-30"
+        style={{ gap: 48 }}
+      >
+        <motion.div variants={fadeUp} className="flex flex-col items-center text-center" style={{ gap: 12, maxWidth: 800 }}>
+          <p className="font-inter uppercase" style={{ fontWeight: 700, fontSize: 14, letterSpacing: "1.5px", color: "#c8963e" }}>
             Explore Our Solutions
           </p>
-          <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-[#0f1f3d] font-serif">
-            From Products to Personalised Systems
+          <h2 style={{ fontSize: 32, lineHeight: 1.2, fontWeight: 700, fontFamily: "var(--font-serif)" }}>
+            From products to personalised solutions
           </h2>
-          <p className="text-xs sm:text-sm text-gray-600 leading-relaxed font-sans">
-            Tailored engineering systems and architectural coatings engineered for superior durability and visual brilliance.
-          </p>
-        </div>
+        </motion.div>
 
-        {/* 3 Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 lg:gap-6">
-          {cards.map((card) => {
-            const Icon = card.icon;
-            return (
-              <div
-                key={card.title}
-                className="bg-white rounded-2xl p-5 sm:p-5.5 lg:p-6 flex flex-col justify-between shadow-xs hover:shadow-lg hover:-translate-y-1 transition-all duration-300 border border-slate-200/80 group relative overflow-hidden"
-              >
-                {/* Subtle Top Gradient Accent */}
-                <div
-                  className={`absolute top-0 inset-x-0 h-1.5 bg-gradient-to-r ${card.accentColor} group-hover:h-2 transition-all duration-300`}
-                />
-
-                <div className="space-y-3.5">
-                  {/* Tag & Icon Row */}
-                  <div className="flex items-center justify-between">
-                    <div className="w-10 h-10 rounded-lg bg-[#1a5276]/10 flex items-center justify-center text-[#1a5276] group-hover:bg-[#1a5276] group-hover:text-white transition-all duration-300 shadow-xs">
-                      <Icon size={20} strokeWidth={1.8} />
-                    </div>
-                    <span className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
-                      {card.tag}
-                    </span>
-                  </div>
-
-                  {/* Title & Body */}
-                  <div className="space-y-1.5">
-                    <h3 className="text-lg sm:text-xl font-bold text-[#0f1f3d] font-serif group-hover:text-[#1a5276] transition-colors">
-                      {card.title}
-                    </h3>
-                    <p className="text-xs sm:text-[13px] text-gray-600 leading-relaxed font-sans">
-                      {card.description}
-                    </p>
-                  </div>
-                </div>
-
-                {/* Bottom Action Link */}
-                <div className="pt-3.5 border-t border-slate-100 mt-4">
-                  <a
-                    href={card.href}
-                    className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1a5276] group-hover:text-[#c8963e] transition-colors"
-                  >
-                    <span>{card.linkText}</span>
-                    <ArrowRight
-                      size={14}
-                      className="transition-transform duration-300 group-hover:translate-x-1"
-                    />
-                  </a>
+        <motion.div variants={staggerContainer(0.1)} className="grid grid-cols-1 md:grid-cols-3 w-full" style={{ gap: 32 }}>
+          {CARDS.map(({ icon: Icon, title, description, linkText, href }) => (
+            <motion.div
+              key={title}
+              variants={cardUp}
+              className="flex flex-col justify-between bg-white"
+              style={{ padding: 40, borderRadius: 8, boxShadow: "0px 12px 16px rgba(0,0,0,0.04)" }}
+            >
+              <div className="flex flex-col items-start" style={{ gap: 24 }}>
+                <span
+                  className="flex items-center justify-center shrink-0"
+                  style={{ width: 48, height: 48, borderRadius: 6, background: "rgba(26,82,118,0.07)" }}
+                >
+                  <Icon size={24} className="text-brand" strokeWidth={1.75} />
+                </span>
+                <div className="flex flex-col items-start" style={{ gap: 12 }}>
+                  <h3 style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-serif)" }}>{title}</h3>
+                  <p style={{ fontSize: 13, lineHeight: 1.6, color: "#555" }}>{description}</p>
                 </div>
               </div>
-            );
-          })}
-        </div>
-      </div>
+
+              <a href={href} className="group inline-flex items-center cursor-pointer" style={{ gap: 6, paddingTop: 24 }}>
+                <span style={{ fontWeight: 600, fontSize: 14, color: "#1a5276" }}>{linkText}</span>
+                <ArrowRight size={16} className="text-brand transition-transform duration-300 group-hover:translate-x-1" />
+              </a>
+            </motion.div>
+          ))}
+        </motion.div>
+      </motion.div>
     </section>
   );
 }
-
-export default FeatureCards;
