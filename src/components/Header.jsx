@@ -6,6 +6,7 @@ import { EASE_OUT } from "../lib/motion";
 const ABOUT_LINKS = [
   { label: "Overview", href: "/" },
   { label: "What We Do", href: "/what-we-do" },
+  { label: "Where We Are", href: "/where-we-are" },
   { label: "Group Profile", href: "/about" },
   { label: "Vision & Values", href: "/about" },
   { label: "History", href: "/about" },
@@ -19,7 +20,7 @@ const ABOUT_MEGA_MENU = {
   links: [
     { label: "Overview", href: "/about" },
     { label: "What We Do", href: "/what-we-do" },
-    { label: "Where We Are", href: "/about#states" },
+    { label: "Where We Are", href: "/where-we-are" },
     { label: "Our Achievements", href: "/about#achievements" },
     { label: "Our Journey", href: "/about#journey" },
   ],
@@ -34,7 +35,7 @@ const ABOUT_MEGA_MENU = {
     description:
       "From manufacturing hubs to distribution networks across India, BI Group's footprint spans the industries and regions that keep the country building, moving, and protected.",
     image: "/about-mega-warehouse.jpg",
-    cta: { label: "Discover more", href: "/about#states" },
+    cta: { label: "Discover more", href: "/where-we-are" },
   },
   banner: {
     title: "Looking for paint and colour for your home?",
