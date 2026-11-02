@@ -11,6 +11,7 @@ import NewsInsights from './components/NewsInsights';
 import Partners from './components/Partners';
 import Footer from './components/Footer';
 import AboutPage from './components/AboutPage';
+import WhatWeDo from './pages/WhatWeDo';
 
 /**
  * BI Paints & Group Main Application
@@ -33,6 +34,9 @@ function App() {
     if (path === '/about' || window.location.hash === '#about') {
       return '/about';
     }
+    if (path === '/what-we-do' || window.location.hash === '#what-we-do') {
+      return '/what-we-do';
+    }
     return path;
   };
 
@@ -44,6 +48,8 @@ function App() {
       const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
       if (path === '/about' || window.location.hash === '#about') {
         setCurrentRoute('/about');
+      } else if (path === '/what-we-do' || window.location.hash === '#what-we-do') {
+        setCurrentRoute('/what-we-do');
       } else {
         setCurrentRoute(path);
       }
@@ -73,8 +79,17 @@ function App() {
       const href = anchor.getAttribute('href');
       if (!href) return;
 
+      // Handle What We Do route
+      if (href === '/what-we-do' || href === '/what-we-do/') {
+        e.preventDefault();
+        if (window.location.pathname !== '/what-we-do') {
+          window.history.pushState(null, '', '/what-we-do');
+        }
+        setCurrentRoute('/what-we-do');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       // Handle About route
-      if (href === '/about' || href === '/about/') {
+      else if (href === '/about' || href === '/about/') {
         e.preventDefault();
         if (window.location.pathname !== '/about') {
           window.history.pushState(null, '', '/about');
@@ -108,7 +123,7 @@ function App() {
       // Handle internal section anchors (#about, #businesses, #kitchens, #sustainability, #investors, #news, #foundation, #ecommerce, #careers, #contact)
       else if (href.startsWith('#')) {
         const targetId = href.slice(1);
-        if (currentRoute === '/about') {
+        if (currentRoute === '/about' || currentRoute === '/what-we-do') {
           e.preventDefault();
           if (window.location.pathname !== '/') {
             window.history.pushState(null, '', '/');
@@ -146,6 +161,7 @@ function App() {
   }, [currentRoute]);
 
   const isAboutPage = currentRoute === '/about';
+  const isWhatWeDoPage = currentRoute === '/what-we-do';
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#0f1f3d]">
@@ -154,7 +170,10 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {isAboutPage ? (
+        {isWhatWeDoPage ? (
+          /* What We Do Page Flow (Recreated 1:1 matching bipaints.netlify.app/what-we-do) */
+          <WhatWeDo />
+        ) : isAboutPage ? (
           /* About Page Flow (Recreated 1:1 matching bipaints.netlify.app/about) */
           <AboutPage />
         ) : (

@@ -5,6 +5,7 @@ import { EASE_OUT } from "../lib/motion";
 
 const ABOUT_LINKS = [
   { label: "Overview", href: "/" },
+  { label: "What We Do", href: "/what-we-do" },
   { label: "Group Profile", href: "/about" },
   { label: "Vision & Values", href: "/about" },
   { label: "History", href: "/about" },
@@ -16,8 +17,8 @@ const ABOUT_LINKS = [
 
 const ABOUT_MEGA_MENU = {
   links: [
-    { label: "Overview", href: "/" },
-    { label: "What We Do", href: "/about#who-we-are" },
+    { label: "Overview", href: "/about" },
+    { label: "What We Do", href: "/what-we-do" },
     { label: "Where We Are", href: "/about#states" },
     { label: "Our Achievements", href: "/about#achievements" },
     { label: "Our Journey", href: "/about#journey" },
