@@ -13,6 +13,7 @@ import Footer from './components/Footer';
 import AboutPage from './components/AboutPage';
 import WhatWeDo from './pages/WhatWeDo';
 import WhereWeAre from './pages/WhereWeAre';
+import Achievements from './pages/Achievements';
 
 /**
  * BI Paints & Group Main Application
@@ -32,6 +33,9 @@ function App() {
   const getInitialRoute = () => {
     if (typeof window === 'undefined') return '/';
     const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
+    if (path === '/about/achievements') {
+      return '/about/achievements';
+    }
     if (path === '/about' || window.location.hash === '#about') {
       return '/about';
     }
@@ -50,7 +54,9 @@ function App() {
     // Sync route on popstate (browser back/forward button clicks)
     const handlePopState = () => {
       const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
-      if (path === '/about' || window.location.hash === '#about') {
+      if (path === '/about/achievements') {
+        setCurrentRoute('/about/achievements');
+      } else if (path === '/about' || window.location.hash === '#about') {
         setCurrentRoute('/about');
       } else if (path === '/what-we-do' || window.location.hash === '#what-we-do') {
         setCurrentRoute('/what-we-do');
@@ -85,8 +91,17 @@ function App() {
       const href = anchor.getAttribute('href');
       if (!href) return;
 
+      // Handle About Achievements route
+      if (href === '/about/achievements' || href === '/about/achievements/') {
+        e.preventDefault();
+        if (window.location.pathname !== '/about/achievements') {
+          window.history.pushState(null, '', '/about/achievements');
+        }
+        setCurrentRoute('/about/achievements');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       // Handle Where We Are route
-      if (href === '/where-we-are' || href === '/where-we-are/') {
+      else if (href === '/where-we-are' || href === '/where-we-are/') {
         e.preventDefault();
         if (window.location.pathname !== '/where-we-are') {
           window.history.pushState(null, '', '/where-we-are');
@@ -111,7 +126,7 @@ function App() {
         }
         setCurrentRoute('/about');
         window.scrollTo({ top: 0, behavior: 'smooth' });
-      } 
+      }
       // Handle About sub-section anchors (e.g. /about#who-we-are, /about#journey)
       else if (href.startsWith('/about#')) {
         e.preventDefault();
@@ -138,7 +153,7 @@ function App() {
       // Handle internal section anchors (#about, #businesses, #kitchens, #sustainability, #investors, #news, #foundation, #ecommerce, #careers, #contact)
       else if (href.startsWith('#')) {
         const targetId = href.slice(1);
-        if (currentRoute === '/about' || currentRoute === '/what-we-do' || currentRoute === '/where-we-are') {
+        if (currentRoute === '/about' || currentRoute === '/what-we-do' || currentRoute === '/where-we-are' || currentRoute === '/about/achievements') {
           // If target element is on the current page (e.g. #global-footprint), scroll to it directly
           const localEl = document.getElementById(targetId);
           if (localEl) {
@@ -185,6 +200,7 @@ function App() {
   const isAboutPage = currentRoute === '/about';
   const isWhatWeDoPage = currentRoute === '/what-we-do';
   const isWhereWeArePage = currentRoute === '/where-we-are';
+  const isAchievementsPage = currentRoute === '/about/achievements';
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#0f1f3d]">
@@ -193,7 +209,10 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {isWhereWeArePage ? (
+        {isAchievementsPage ? (
+          /* Achievements Page Flow (/about/achievements) */
+          <Achievements />
+        ) : isWhereWeArePage ? (
           /* Where We Are Page Flow (Recreated 1:1 matching bipaints.netlify.app/where-we-are) */
           <WhereWeAre />
         ) : isWhatWeDoPage ? (
