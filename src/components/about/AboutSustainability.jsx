@@ -1,5 +1,6 @@
 import React from 'react';
 import { Leaf } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * AboutSustainability Component
@@ -7,20 +8,8 @@ import { Leaf } from 'lucide-react';
  * Matching bipaints.netlify.app/about (Section 6)
  */
 function AboutSustainability() {
-  const pillars = [
-    {
-      title: 'Eco-Friendly Manufacturing',
-      description: 'Formulating low-VOC water-based protective finishes.',
-    },
-    {
-      title: 'Energy Efficiency',
-      description: 'Solar-powered plants cutting overall operational emissions.',
-    },
-    {
-      title: 'Responsible Sourcing',
-      description: '100% trace-monitored raw inputs from certified ethical farms.',
-    },
-  ];
+  const { t } = useLanguage();
+  const pillars = t('about.sustainability.pillars');
 
   return (
     <section className="bg-white py-8 sm:py-10 lg:py-12">
@@ -30,7 +19,7 @@ function AboutSustainability() {
         <div className="relative w-full lg:flex-1 overflow-hidden shrink-0 h-[260px] sm:h-[320px] max-w-[631px] rounded-3xl border border-[#ede8df] shadow-md">
           <img
             src="/about-eco-factory.jpg"
-            alt="BI Group sustainable manufacturing"
+            alt={t('about.sustainability.imageAlt')}
             className="w-full h-full object-cover"
           />
         </div>
@@ -43,12 +32,12 @@ function AboutSustainability() {
             <div className="flex items-center gap-2">
               <span className="w-4 h-[2px] bg-[#d97706]" />
               <span className="font-inter uppercase font-bold text-xs tracking-[2px] text-[#d97706]">
-                Green Future
+                {t('about.sustainability.tag')}
               </span>
             </div>
 
             <h2 className="font-serif text-2xl sm:text-[28px] leading-tight text-[#1b1b2f] font-bold">
-              Commitment to Sustainability
+              {t('about.sustainability.heading')}
             </h2>
 
             <span className="w-8 h-1 rounded-[2px] bg-[#d97706]" />
@@ -56,13 +45,13 @@ function AboutSustainability() {
 
           {/* Description Paragraph */}
           <p className="font-normal text-sm leading-relaxed text-[#4b5563]">
-            At BI Group, we actively design our processes to minimize footprint. Our manufacturing campuses employ advanced wastewater recycling and green-energy infrastructure to construct self-reliant ecosystem units.
+            {t('about.sustainability.description')}
           </p>
 
           {/* 3 Pillars List */}
           <div className="flex flex-col items-start w-full gap-5">
             {pillars.map((pillar) => (
-              <div key={pillar.title} className="flex items-start w-full gap-4">
+              <div key={pillar.description} className="flex items-start w-full gap-4">
                 <span className="flex items-center justify-center shrink-0 w-11 h-11 rounded-xl bg-[#fef9e7]">
                   <Leaf size={20} className="text-[#d97706]" />
                 </span>

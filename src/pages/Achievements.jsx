@@ -22,6 +22,9 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { useLanguage } from '../context/LanguageContext';
+
+// All visible text lives in src/locales (achievements.*); list text is paired by index.
 import { Award, CheckCircle, HardHat, Leaf } from 'lucide-react';
 
 // ─────────────────────────────────────────────────────────
@@ -72,13 +75,15 @@ function Counter({ target, suffix = '' }) {
 // Eyebrow "Milestones of Trust" | h1 "Our Achievements" | 4 stats
 // ─────────────────────────────────────────────────────────
 const STATS = [
-  { target: 14,  suffix: '+',  label: 'Years Experience'   },
-  { target: 500, suffix: '+',  label: 'Dealer Network'     },
-  { target: 1,   suffix: 'M+', label: 'Litres Production'  },
-  { target: 100, suffix: '%',  label: 'Quality Commitment' },
+  { target: 14,  suffix: '+' },
+  { target: 500, suffix: '+' },
+  { target: 1,   suffix: 'M+' },
+  { target: 100, suffix: '%' },
 ];
 
 function Hero() {
+  const { t } = useLanguage();
+  const stats = STATS.map((stat, i) => ({ ...stat, label: t('achievements.hero.stats')[i] }));
   return (
     <section
       className="relative w-full overflow-hidden flex flex-col"
@@ -88,7 +93,7 @@ function Hero() {
       <div className="absolute inset-0">
         <img
           src="/about-hero-2.jpg"
-          alt="BI Group manufacturing facility"
+          alt={t('achievements.hero.imageAlt')}
           className="w-full h-full object-cover object-center"
           loading="eager"
         />
@@ -109,7 +114,7 @@ function Hero() {
           className="m-0 uppercase font-semibold"
           style={{ fontSize: 12, letterSpacing: '3.5px', color: '#c8963e' }}
         >
-          Milestones of Trust
+          {t('achievements.hero.eyebrow')}
         </p>
 
         {/* H1 */}
@@ -117,7 +122,7 @@ function Hero() {
           className="font-serif font-bold text-white m-0 mt-4 leading-tight"
           style={{ fontSize: 'clamp(32px, 5vw, 52px)', lineHeight: 1.15 }}
         >
-          Our Achievements
+          {t('achievements.hero.title')}
         </h1>
 
         {/* Gold divider bar */}
@@ -132,7 +137,7 @@ function Hero() {
         className="relative grid grid-cols-2 lg:grid-cols-4"
         style={{ borderTop: '1px solid rgba(255,255,255,0.12)' }}
       >
-        {STATS.map((stat, i) => (
+        {stats.map((stat, i) => (
           <div
             key={stat.label}
             className="flex flex-col items-center justify-center text-center py-10 px-5"
@@ -204,38 +209,31 @@ function SectionHead({ eyebrow, title }) {
 const LEADERS = [
   {
     img:  '/about-leader-0.jpg',
-    name: 'B.I. Sharma',
-    role: 'Founder & Chairman',
-    bio:  "A visionary entrepreneur leading BI Group's diverse expansion from a single coatings startup to a national industrial conglomerate.",
   },
   {
     img:  '/about-leader-1.jpg',
-    name: 'Amit Sharma',
-    role: 'Managing Director',
-    bio:  'Directs technology and modern modular divisions, implementing automated European workflows across our heavy manufacturing bases.',
   },
   {
     img:  '/about-leader-2.jpg',
-    name: 'Priya Patel',
-    role: 'Executive Director',
-    bio:  'Manages nationwide logistics, institutional dealer relations, and leads the strategic roll-out of direct-to-consumer digital commerce.',
   },
 ];
 
 function Leadership() {
+  const { t } = useLanguage();
+  const leaders = LEADERS.map((ldr, i) => ({ ...ldr, ...t('achievements.leadership.leaders')[i] }));
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
         className="mx-auto flex flex-col items-center"
         style={{ maxWidth: 1280, paddingLeft: 24, paddingRight: 24, gap: 48 }}
       >
-        <SectionHead eyebrow="Board of Directors" title="Our Leadership" />
+        <SectionHead eyebrow={t('achievements.leadership.eyebrow')} title={t('achievements.leadership.title')} />
 
         {/* Cards */}
         <div className="w-full grid grid-cols-1 md:grid-cols-3" style={{ gap: 28 }}>
-          {LEADERS.map((ldr) => (
+          {leaders.map((ldr) => (
             <div
-              key={ldr.name}
+              key={ldr.img}
               className="flex flex-col rounded-2xl overflow-hidden bg-white"
               style={{
                 border: '1px solid rgba(15,31,61,0.07)',
@@ -320,50 +318,40 @@ const CERTS = [
     accent:    '#1a5276',
     iconBg:    '#ebf3fb',
     iconColor: '#1a5276',
-    title:     'ISO 9001:2015',
-    subtitle:  'Quality Management',
-    desc:      'Certified adherence to global manufacturing, rigorous inspection pipelines, and client feedback frameworks.',
   },
   {
     Icon:      CheckCircle,
     accent:    '#c8963e',
     iconBg:    '#fef9e7',
     iconColor: '#c8963e',
-    title:     'BIS Compliant',
-    subtitle:  'National Assurance',
-    desc:      'Perfect alignment with Bureau of Indian Standards, ensuring trusted domestic products.',
   },
   {
     Icon:      HardHat,
     accent:    '#d97706',
     iconBg:    '#fef3e2',
     iconColor: '#d97706',
-    title:     'OHSAS 18001',
-    subtitle:  'Safety Certified',
-    desc:      'Industry-leading protective standards for floor-workers and sustainable plant personnel welfare.',
   },
   {
     Icon:      Leaf,
     accent:    '#059669',
     iconBg:    '#ecfdf5',
     iconColor: '#059669',
-    title:     'ISO 14001:2015',
-    subtitle:  'Environmental System',
-    desc:      'Continuous environmental monitoring and strict emission safety benchmarks across facilities.',
   },
 ];
 
 function Certifications() {
+  const { t } = useLanguage();
+  const certs = CERTS.map((cert, i) => ({ ...cert, ...t('achievements.certifications.items')[i] }));
   return (
     <section style={{ background: '#f4f7fb', paddingTop: 80, paddingBottom: 80 }}>
       <div
         className="mx-auto flex flex-col items-center"
         style={{ maxWidth: 1280, paddingLeft: 24, paddingRight: 24, gap: 48 }}
       >
-        <SectionHead eyebrow="Standards & Assurance" title="Certifications & Quality" />
+        <SectionHead eyebrow={t('achievements.certifications.eyebrow')} title={t('achievements.certifications.title')} />
 
         <div className="w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4" style={{ gap: 20 }}>
-          {CERTS.map(({ Icon, accent, iconBg, iconColor, title, subtitle, desc }) => (
+          {certs.map(({ Icon, accent, iconBg, iconColor, title, subtitle, desc }) => (
             <div
               key={title}
               className="flex flex-col bg-white rounded-2xl"
@@ -427,33 +415,22 @@ function Certifications() {
 // SECTION 4 — TRUSTED BY LEADING INDUSTRIES
 // White bg | 5-col grid | text-only tiles with hover gold border
 // ─────────────────────────────────────────────────────────
-const INDUSTRY_TILES = [
-  'Tata Infrastructure',
-  'Reliance Heavy',
-  'L&T Construction',
-  'Adani Ports',
-  'Shapoorji Group',
-  'JSW Steel',
-  'GMR Aviation',
-  'DLF Luxury',
-  'Godrej Properties',
-  'IRCTC Projects',
-];
 
 function TrustedIndustries() {
+  const { t } = useLanguage();
   return (
     <section className="bg-white" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
         className="mx-auto flex flex-col items-center"
         style={{ maxWidth: 1280, paddingLeft: 24, paddingRight: 24, gap: 48 }}
       >
-        <SectionHead eyebrow="Industry Alliances" title="Trusted by Leading Industries" />
+        <SectionHead eyebrow={t('achievements.industries.eyebrow')} title={t('achievements.industries.title')} />
 
         <div
           className="w-full grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5"
           style={{ gap: 16 }}
         >
-          {INDUSTRY_TILES.map((name) => (
+          {t('achievements.industries.tiles').map((name) => (
             <div
               key={name}
               className="flex items-center justify-center bg-white rounded-xl"
@@ -508,10 +485,15 @@ const INDUSTRY_OPTS = [
 // Route: /about/achievements  (handled in App.jsx)
 // ─────────────────────────────────────────────────────────
 export default function Achievements() {
+  const { t } = useLanguage();
+
   useEffect(() => {
-    document.title = 'Our Achievements – BI Group';
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, []);
+
+  useEffect(() => {
+    document.title = t('achievements.pageTitle');
+  }, [t]);
 
   return (
     <div className="w-full bg-white text-[#0f1f3d]">

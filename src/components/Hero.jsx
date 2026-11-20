@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { passThroughVariants, TypingReveal } from "./TypingReveal";
 import { EASE_OUT, hoverScaleButton, hoverTransition, tapScaleButton } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
 const AUTOPLAY_MS = 6000;
 
@@ -17,12 +18,10 @@ const buttonVariants = {
   visible: { opacity: 1, y: 0, transition: { duration: 0.9, ease: EASE_OUT, delay: 2.5 } },
 };
 
+// Slide text lives in src/locales (home.hero.slides), paired by index
 const SLIDES = [
   {
     // Figma: hero-carousel-banner, node 3900:222 — slide-paints (default slide)
-    title: "Transforming Spaces with Color",
-    description:
-      "A modern palette for architects, builders, and homeowners-crafted for performance, sustainability, and timeless beauty.",
     image: "/hero-slide-paints.jpg",
   },
 ];
@@ -43,7 +42,8 @@ export default function Hero() {
     };
   }, [paused, next]);
 
-  const slide = SLIDES[index];
+  const { t } = useLanguage();
+  const slide = { ...SLIDES[index], ...t("home.hero.slides")[index] };
 
   return (
     <section
@@ -177,7 +177,7 @@ export default function Hero() {
         {SLIDES.length >= 1 && (
           <>
             <button
-              aria-label="Previous slide"
+              aria-label={t("common.previousSlide")}
               onClick={prev}
               className="hidden sm:flex absolute left-5 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/30 backdrop-blur-sm z-30 cursor-pointer"
               style={{ transition: "background-color 0.2s ease-in-out" }}
@@ -185,7 +185,7 @@ export default function Hero() {
               <ChevronLeft size={20} />
             </button>
             <button
-              aria-label="Next slide"
+              aria-label={t("common.nextSlide")}
               onClick={next}
               className="hidden sm:flex absolute right-5 top-1/2 -translate-y-1/2 items-center justify-center w-10 h-10 rounded-full bg-white/15 text-white hover:bg-white/30 backdrop-blur-sm z-30 cursor-pointer"
               style={{ transition: "background-color 0.2s ease-in-out" }}
@@ -199,8 +199,8 @@ export default function Hero() {
         <div className="absolute left-1/2 -translate-x-1/2 flex items-center z-30" style={{ bottom: 48, gap: 8 }}>
           {SLIDES.map((s, i) => (
             <button
-              key={s.title}
-              aria-label={`Go to slide ${i + 1}`}
+              key={s.image}
+              aria-label={t("common.goToSlide", { n: i + 1 })}
               onClick={() => setIndex(i)}
               className="cursor-pointer"
               style={{

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ChevronDown,
   Warehouse,
@@ -8,10 +8,12 @@ import {
   ArrowRight,
   ChevronRight,
 } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
 
 // ========================================================
 // DATA: Global Footprint Locations and Routes
 // ========================================================
+// Location names and detail text live in src/locales (whereWeAre.locations.<id>)
 const LOCATIONS = [
   {
     id: "surat",
@@ -22,17 +24,9 @@ const LOCATIONS = [
     items: [
       {
         icon: "office",
-        type: "Office",
-        title: "Surat, India",
-        description:
-          "Our head office coordinates business operations, quality standards and growth across every BI Group market.",
       },
       {
         icon: "manufacturing",
-        type: "Manufacturing",
-        title: "Surat, India",
-        description:
-          "Our core manufacturing base, supporting consistent quality and reliable supply across markets we serve.",
       },
     ],
   },
@@ -46,10 +40,6 @@ const LOCATIONS = [
     items: [
       {
         icon: "export",
-        type: "Export Market",
-        title: "Dubai, UAE",
-        description:
-          "Serving customers across the Middle East through our growing export network.",
       },
     ],
   },
@@ -63,10 +53,6 @@ const LOCATIONS = [
     items: [
       {
         icon: "export",
-        type: "Export Market",
-        title: "Thailand, Thailand",
-        description:
-          "A growing export market for BI Paints solutions in Southeast Asia.",
       },
     ],
   },
@@ -80,10 +66,6 @@ const LOCATIONS = [
     items: [
       {
         icon: "export",
-        type: "Export Market",
-        title: "Bangladesh, Bangladesh",
-        description:
-          "Serving customers in Bangladesh through our expanding distribution partnerships.",
       },
     ],
   },
@@ -97,10 +79,6 @@ const LOCATIONS = [
     items: [
       {
         icon: "export",
-        type: "Export Market",
-        title: "Sri Lanka, Sri Lanka",
-        description:
-          "Delivering trusted paint and coating solutions to customers across Sri Lanka.",
       },
     ],
   },
@@ -114,10 +92,6 @@ const LOCATIONS = [
     items: [
       {
         icon: "export",
-        type: "Export Market",
-        title: "Maldives, Maldives",
-        description:
-          "Extending our export network to customers across the Maldives.",
       },
     ],
   },
@@ -127,6 +101,7 @@ const LOCATIONS = [
 // 1. HERO SECTION
 // ========================================================
 const Hero = () => {
+  const { t } = useLanguage();
   return (
     <section
       className="relative w-full overflow-hidden flex flex-col items-center justify-center"
@@ -136,7 +111,7 @@ const Hero = () => {
       <div className="absolute inset-0">
         <img
           src="/wwa2-hero.jpg"
-          alt="BI Group presence across markets"
+          alt={t("whereWeAre.hero.imageAlt")}
           className="w-full h-full object-cover"
         />
       </div>
@@ -156,14 +131,14 @@ const Hero = () => {
           className="m-0 text-white font-bold"
           style={{ fontSize: "40px", lineHeight: "1.15" }}
         >
-          Where We Are
+          {t("whereWeAre.hero.title")}
         </h1>
 
         <p
           className="font-light max-w-2xl text-white/90"
           style={{ fontSize: "18px", lineHeight: "1.35" }}
         >
-          Growing our presence. Connecting markets. Delivering solutions.
+          {t("whereWeAre.hero.subtitle")}
         </p>
 
         {/* CTA Buttons */}
@@ -184,7 +159,7 @@ const Hero = () => {
               color: "#ffffff",
             }}
           >
-            Explore Our Presence
+            {t("whereWeAre.hero.primaryCta")}
           </a>
 
           <a
@@ -200,7 +175,7 @@ const Hero = () => {
               color: "#ffffff",
             }}
           >
-            Contact Us
+            {t("whereWeAre.hero.secondaryCta")}
           </a>
         </div>
       </div>
@@ -220,10 +195,15 @@ const Hero = () => {
 // 2. GLOBAL FOOTPRINT SECTION
 // ========================================================
 const GlobalFootprint = () => {
+  const { t } = useLanguage();
   const [selectedKey, setSelectedKey] = useState("surat");
 
-  const activeLocation =
-    LOCATIONS.find((loc) => loc.id === selectedKey) || LOCATIONS[0];
+  const locationText = t("whereWeAre.locations");
+  const baseLocation = LOCATIONS.find((loc) => loc.id === selectedKey) || LOCATIONS[0];
+  const activeLocation = {
+    ...baseLocation,
+    items: baseLocation.items.map((item, i) => ({ ...item, ...locationText[baseLocation.id].items[i] })),
+  };
 
   return (
     <section
@@ -248,7 +228,7 @@ const GlobalFootprint = () => {
                 color: "#d9a441",
               }}
             >
-              Global Footprint
+              {t("whereWeAre.footprint.eyebrow")}
             </span>
           </div>
 
@@ -261,7 +241,7 @@ const GlobalFootprint = () => {
               color: "#0b1f3a",
             }}
           >
-            Our Global Footprint
+            {t("whereWeAre.footprint.heading")}
           </h2>
 
           <p
@@ -272,9 +252,7 @@ const GlobalFootprint = () => {
               color: "#555",
             }}
           >
-            From our home in India to growing international markets, BI Group is
-            building a connected network that brings quality products and solutions
-            closer to customers.
+            {t("whereWeAre.footprint.description")}
           </p>
         </div>
 
@@ -291,7 +269,7 @@ const GlobalFootprint = () => {
           >
             <img
               src="/global-footprint-map.png"
-              alt="BI Group global footprint map"
+              alt={t("whereWeAre.footprint.mapAlt")}
               className="w-full h-full object-cover"
             />
 
@@ -332,7 +310,7 @@ const GlobalFootprint = () => {
                 <button
                   key={loc.id}
                   type="button"
-                  aria-label={`Show details for ${loc.name}`}
+                  aria-label={t("whereWeAre.footprint.showDetails", { name: locationText[loc.id].name })}
                   onClick={() => setSelectedKey(loc.id)}
                   className="absolute -translate-x-1/2 -translate-y-1/2 flex items-center justify-center cursor-pointer transition-transform duration-200 hover:scale-125"
                   style={{
@@ -435,6 +413,7 @@ const GlobalFootprint = () => {
 // 3. INDIA PRESENCE SECTION
 // ========================================================
 const IndiaPresence = () => {
+  const { t } = useLanguage();
   const [showTooltip, setShowTooltip] = useState(false);
 
   return (
@@ -462,7 +441,7 @@ const IndiaPresence = () => {
                 color: "#d9a441",
               }}
             >
-              India Presence
+              {t("whereWeAre.india.eyebrow")}
             </span>
           </div>
 
@@ -475,7 +454,7 @@ const IndiaPresence = () => {
               color: "#0b1f3a",
             }}
           >
-            Strong roots. Wider reach.
+            {t("whereWeAre.india.heading")}
           </h2>
 
           <p
@@ -486,9 +465,7 @@ const IndiaPresence = () => {
               color: "#555",
             }}
           >
-            With a strong foundation in India, BI Group continues to expand its
-            market presence through manufacturing capabilities, distribution
-            networks and strategic partnerships.
+            {t("whereWeAre.india.description")}
           </p>
         </div>
 
@@ -505,14 +482,14 @@ const IndiaPresence = () => {
           >
             <img
               src="/wwd-india-map.jpg"
-              alt="BI Group presence across India"
+              alt={t("whereWeAre.india.mapAlt")}
               className="w-full h-full object-contain p-6"
             />
 
             {/* Surat Pin Marker */}
             <button
               type="button"
-              aria-label="Surat, Gujarat — Head Office & Manufacturing"
+              aria-label={t("whereWeAre.india.pinLabel")}
               onClick={() => setShowTooltip((prev) => !prev)}
               onMouseEnter={() => setShowTooltip(true)}
               onMouseLeave={() => setShowTooltip(false)}
@@ -559,13 +536,13 @@ const IndiaPresence = () => {
                     color: "#0b1f3a",
                   }}
                 >
-                  Surat, Gujarat
+                  {t("whereWeAre.india.tooltipTitle")}
                 </span>
                 <span
                   className="block"
                   style={{ fontSize: "12px", color: "#777", marginTop: "4px" }}
                 >
-                  Head Office & Manufacturing
+                  {t("whereWeAre.india.tooltipText")}
                 </span>
               </div>
             )}
@@ -587,7 +564,7 @@ const IndiaPresence = () => {
                   color: "#0b1f3a",
                 }}
               >
-                Manufacturing & Head Office
+                {t("whereWeAre.india.listHeading")}
               </span>
 
               <div className="flex items-center" style={{ gap: "10px" }}>
@@ -600,7 +577,7 @@ const IndiaPresence = () => {
                   }}
                 />
                 <span style={{ fontSize: "15px", color: "#333" }}>
-                  Surat, Gujarat — Head Office
+                  {t("whereWeAre.india.headOffice")}
                 </span>
               </div>
 
@@ -614,7 +591,7 @@ const IndiaPresence = () => {
                   }}
                 />
                 <span style={{ fontSize: "15px", color: "#333" }}>
-                  Surat, Gujarat — Manufacturing Facility
+                  {t("whereWeAre.india.facility")}
                 </span>
               </div>
             </div>
@@ -630,7 +607,7 @@ const IndiaPresence = () => {
                   color: "#0b1f3a",
                 }}
               >
-                States Covered
+                {t("whereWeAre.india.statesHeading")}
               </span>
 
               <div className="flex flex-wrap" style={{ gap: "10px" }}>
@@ -647,7 +624,7 @@ const IndiaPresence = () => {
                     border: "1px solid #e0dcd0",
                   }}
                 >
-                  Gujarat
+                  {t("whereWeAre.india.states")[0]}
                 </span>
 
                 <span
@@ -663,7 +640,7 @@ const IndiaPresence = () => {
                     border: "1px solid #e0dcd0",
                   }}
                 >
-                  Maharashtra
+                  {t("whereWeAre.india.states")[1]}
                 </span>
 
                 <span
@@ -679,7 +656,7 @@ const IndiaPresence = () => {
                     border: "1px solid #e0dcd0",
                   }}
                 >
-                  Rajasthan
+                  {t("whereWeAre.india.states")[2]}
                 </span>
 
                 <span
@@ -694,7 +671,7 @@ const IndiaPresence = () => {
                     border: "1px dashed #cfc9ba",
                   }}
                 >
-                  + More States
+                  {t("whereWeAre.india.moreStates")}
                 </span>
               </div>
             </div>
@@ -709,13 +686,8 @@ const IndiaPresence = () => {
 // 4. MANUFACTURING INFRASTRUCTURE SECTION
 // ========================================================
 const Manufacturing = () => {
-  const highlights = [
-    "Modern manufacturing infrastructure",
-    "Quality-focused production",
-    "Scalable capacity",
-    "Efficient supply network",
-    "Consistent product standards",
-  ];
+  const { t } = useLanguage();
+  const highlights = t("whereWeAre.manufacturing.highlights");
 
   return (
     <section
@@ -737,7 +709,7 @@ const Manufacturing = () => {
         >
           <img
             src="/about-warehouse.png"
-            alt="BI Group manufacturing facility"
+            alt={t("whereWeAre.manufacturing.imageAlt")}
             className="w-full h-full object-cover"
           />
         </div>
@@ -756,7 +728,7 @@ const Manufacturing = () => {
                   color: "#d9a441",
                 }}
               >
-                Manufacturing
+                {t("whereWeAre.manufacturing.eyebrow")}
               </span>
             </div>
 
@@ -769,7 +741,7 @@ const Manufacturing = () => {
                 color: "#0b1f3a",
               }}
             >
-              Built to deliver.
+              {t("whereWeAre.manufacturing.heading")}
             </h2>
 
             <p
@@ -780,9 +752,7 @@ const Manufacturing = () => {
                 color: "#555",
               }}
             >
-              Our manufacturing infrastructure is designed to support consistent
-              quality, efficient production and reliable supply across the markets
-              we serve.
+              {t("whereWeAre.manufacturing.description")}
             </p>
           </div>
 
@@ -817,7 +787,7 @@ const Manufacturing = () => {
                   color: "#ffffff",
                 }}
               >
-                Explore Our Manufacturing
+                {t("whereWeAre.manufacturing.cta")}
               </span>
               <ArrowRight size={16} color="#ffffff" />
             </a>
@@ -832,6 +802,7 @@ const Manufacturing = () => {
 // 5. FINAL PARTNER CTA SECTION
 // ========================================================
 const FinalCta = () => {
+  const { t } = useLanguage();
   return (
     <section
       className="relative overflow-hidden"
@@ -841,7 +812,7 @@ const FinalCta = () => {
       <div className="absolute inset-0">
         <img
           src="/wwd2-final-cta.jpg"
-          alt="BI Group collaboration"
+          alt={t("whereWeAre.finalCta.imageAlt")}
           className="w-full h-full object-cover"
         />
       </div>
@@ -868,7 +839,7 @@ const FinalCta = () => {
               color: "#ffffff",
             }}
           >
-            Partner With Us
+            {t("whereWeAre.finalCta.eyebrow")}
           </span>
         </div>
 
@@ -881,7 +852,7 @@ const FinalCta = () => {
             maxWidth: "800px",
           }}
         >
-          Let's build what's next.
+          {t("whereWeAre.finalCta.heading")}
         </h2>
 
         <p
@@ -893,8 +864,7 @@ const FinalCta = () => {
             maxWidth: "700px",
           }}
         >
-          Whether you're looking for the right solution, planning a project or
-          exploring a partnership, BI Group is ready to work with you.
+          {t("whereWeAre.finalCta.description")}
         </p>
 
         {/* Buttons */}
@@ -921,7 +891,7 @@ const FinalCta = () => {
                 color: "#0b1f3a",
               }}
             >
-              Talk to BI Group
+              {t("whereWeAre.finalCta.primaryCta")}
             </span>
             <ChevronRight size={16} color="#0b1f3a" />
           </a>
@@ -946,7 +916,7 @@ const FinalCta = () => {
                 color: "#ffffff",
               }}
             >
-              Explore Our Businesses
+              {t("whereWeAre.finalCta.secondaryCta")}
             </span>
             <ChevronRight size={16} color="#ffffff" />
           </a>
@@ -960,6 +930,11 @@ const FinalCta = () => {
 // MAIN WHERE WE ARE PAGE
 // ========================================================
 const WhereWeAre = () => {
+  const { t } = useLanguage();
+
+  useEffect(() => {
+    document.title = t("whereWeAre.pageTitle");
+  }, [t]);
   return (
     <>
       {/* 1. Hero banner */}

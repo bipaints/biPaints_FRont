@@ -10,6 +10,7 @@ import {
   viewportOnce,
   EASE_OUT,
 } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
 const slideIn = {
   hidden: { opacity: 0, x: -20 },
@@ -17,12 +18,13 @@ const slideIn = {
 };
 
 export default function CareerBanner() {
+  const { t } = useLanguage();
   return (
     // Figma: section.behind-coating, node 3900:336, aspect-[1440/600]
     <section id="careers" className="font-inter relative overflow-hidden w-full" style={{ aspectRatio: "1819 / 563" }}>
       <img
         src="/career-banner-2.jpg"
-        alt="Career at BI Group"
+        alt={t("home.career.imageAlt")}
         className="absolute inset-0 w-full h-full object-cover object-center"
       />
 
@@ -51,17 +53,16 @@ export default function CareerBanner() {
               className="w-full"
               style={{ fontSize: 36, lineHeight: 1.15, letterSpacing: "-1.5px", color: "#ffffff", fontFamily: "var(--font-serif)" }}
             >
-              Career at BI Group
+              {t("home.career.heading")}
             </motion.h2>
 
             <motion.div
               variants={slideIn}
               style={{ fontWeight: 400, fontSize: 15, color: "rgba(255,255,255,0.85)" }}
             >
-              <p style={{ lineHeight: 1.7, margin: 0 }}>We believe in people who are passionate,driven and ready </p>
-              <p style={{ lineHeight: 1.7, margin: 0 }}>to make a difference. </p>
-              <p style={{ lineHeight: 1.7, margin: 0 }}>Explore opportunities and grow with India&apos;s</p>
-              <p style={{ lineHeight: 1.7, margin: 0 }}> trusted paint company.</p>
+              {t("home.career.lines").map((line) => (
+                <p key={line} style={{ lineHeight: 1.7, margin: 0 }}>{line}</p>
+              ))}
             </motion.div>
           </div>
 
@@ -81,7 +82,7 @@ export default function CareerBanner() {
                 transition: "background-color 0.25s ease-in-out",
               }}
             >
-              <span style={{ fontWeight: 600, fontSize: 14, color: "#ffffff" }}>Learn more</span>
+              <span style={{ fontWeight: 600, fontSize: 14, color: "#ffffff" }}>{t("home.career.cta")}</span>
               <ArrowRight size={16} className="text-white transition-transform duration-300 group-hover:translate-x-1" />
             </a>
           </motion.div>

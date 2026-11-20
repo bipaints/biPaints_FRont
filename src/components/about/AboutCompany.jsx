@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Award, Briefcase, Users, MapPin } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * AnimatedCounter component
@@ -56,34 +57,37 @@ function AnimatedCounter({ value, suffix = '', duration = 1.4, className = '', s
  * and 4 operational metrics cards from bipaints.netlify.app/about.
  */
 function AboutCompany() {
+  const { t } = useLanguage();
+  // Stat text lives in src/locales (about.company.stats), paired by index
+  const statText = t('about.company.stats');
   const stats = [
     {
       icon: Award,
       value: 14,
       suffix: '+',
-      label: 'Years of Excellence',
-      description: 'Years of building trust and delivering results across industries.',
+      label: statText[0].label,
+      description: statText[0].description,
     },
     {
       icon: Briefcase,
       value: 10,
       suffix: '',
-      label: 'Business Verticals',
-      description: 'Diverse sectors served with balanced solutions and expertise.',
+      label: statText[1].label,
+      description: statText[1].description,
     },
     {
       icon: Users,
       value: 500,
       suffix: '+',
-      label: 'Dealer Network',
-      description: 'Strong partnerships that power distribution and local support.',
+      label: statText[2].label,
+      description: statText[2].description,
     },
     {
       icon: MapPin,
       value: 20,
       suffix: '+',
-      label: 'States Presence',
-      description: 'Nationwide reach with localized operations and consistent delivery.',
+      label: statText[3].label,
+      description: statText[3].description,
     },
   ];
 
@@ -100,23 +104,23 @@ function AboutCompany() {
             <div className="flex items-center gap-2">
               <span className="w-4 h-[2px] bg-[#d97706]" />
               <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-[#d97706]">
-                Who We Are
+                {t('about.company.tag')}
               </span>
             </div>
 
             {/* Leading Heading Statement */}
             <p className="font-serif font-bold text-lg sm:text-[20px] leading-snug text-[#1b1b2f]">
-              Founded in 2012, BI Group is a diversified Indian industrial conglomerate built on a legacy of trust, quality, and commitment.
+              {t('about.company.lead')}
             </p>
 
             {/* Paragraph 1 */}
             <p className="text-sm leading-relaxed text-[#4b5563]">
-              What began as a pioneering protective coatings company has rapidly transformed into a multi-business enterprise spanning paints, home solutions, modular kitchens, sustainable agriculture, holistic homeopathy, electronics, and engineering divisions. Our core philosophy bridges deep industrial precision with consumer-centric innovation, ensuring every product delivers exceptional value across our e-commerce platforms and retail networks.
+              {t('about.company.paragraph1')}
             </p>
 
             {/* Paragraph 2 */}
             <p className="text-sm leading-relaxed text-[#4b5563]">
-              With our national footprint growing across 20+ states, we take pride in aligning our corporate milestones directly with India&apos;s infrastructure development and self-reliance goals.
+              {t('about.company.paragraph2')}
             </p>
           </div>
 
@@ -136,7 +140,7 @@ function AboutCompany() {
             >
               <img
                 src="/about-overview-main.jpg"
-                alt="BI Group logistics and operations"
+                alt={t('about.company.mainImageAlt')}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -155,7 +159,7 @@ function AboutCompany() {
             >
               <img
                 src="/about-overview-secondary.jpg"
-                alt="BI Group leadership team in a meeting"
+                alt={t('about.company.secondaryImageAlt')}
                 className="w-full h-full object-cover"
               />
             </div>
@@ -185,7 +189,7 @@ function AboutCompany() {
                 }}
               />
               <span style={{ fontWeight: 500, fontSize: '13px', color: '#6b7280' }}>
-                Years Of Excellence
+                {t('about.company.badgeLabel')}
               </span>
             </div>
           </div>
@@ -198,7 +202,7 @@ function AboutCompany() {
             const Icon = stat.icon;
             return (
               <div
-                key={stat.label}
+                key={idx}
                 className={`flex flex-col items-start flex-1 w-full py-6 sm:py-0 px-4 sm:px-6 lg:px-10 ${
                   idx > 0 ? 'sm:border-l border-amber-500/30' : ''
                 }`}

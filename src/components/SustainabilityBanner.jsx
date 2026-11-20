@@ -10,14 +10,16 @@ import {
   tapScaleButton,
   viewportOnce,
 } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
 export default function SustainabilityBanner() {
+  const { t } = useLanguage();
   return (
     // Figma: bi-sustainability-banner, node 3900:462, px-140 py-64
     <section id="sustainability" className="relative overflow-hidden w-full flex flex-col justify-center px-6 sm:px-10 lg:px-35 py-16" style={{ minHeight: 560 }}>
       <img
         src="/sustainability-banner-2.jpg"
-        alt="BI Group sustainability"
+        alt={t("home.sustainability.imageAlt")}
         className="absolute inset-0 w-full h-full object-cover"
       />
       <div
@@ -41,7 +43,7 @@ export default function SustainabilityBanner() {
             className="font-inter uppercase w-full"
             style={{ fontWeight: 700, fontSize: 11, letterSpacing: "2px", color: "rgba(255,255,255,0.8)" }}
           >
-            At BI Group, we are driven by a purpose to build and protect India&apos;s future
+            {t("home.sustainability.eyebrow")}
           </motion.span>
 
           <motion.div
@@ -49,8 +51,8 @@ export default function SustainabilityBanner() {
             className="w-full"
             style={{ fontFamily: "var(--font-pt-serif)", fontWeight: 700, fontSize: 28, letterSpacing: "-1.5px", color: "#ffffff" }}
           >
-            <p style={{ lineHeight: 1.2, margin: 0 }}>Protecting Surfaces,</p>
-            <p style={{ lineHeight: 1.2, margin: 0 }}>Preserving the Future</p>
+            <p style={{ lineHeight: 1.2, margin: 0 }}>{t("home.sustainability.headingLine1")}</p>
+            <p style={{ lineHeight: 1.2, margin: 0 }}>{t("home.sustainability.headingLine2")}</p>
           </motion.div>
 
           <motion.p
@@ -58,9 +60,7 @@ export default function SustainabilityBanner() {
             className="w-full"
             style={{ fontWeight: 400, fontSize: 13, lineHeight: 1.6, color: "rgba(255,255,255,0.85)" }}
           >
-            Together with our partners and customers, we are committed to delivering
-            world-class coatings and solutions that protect infrastructure, empower
-            industries, and contribute to a sustainable tomorrow.
+            {t("home.sustainability.description")}
           </motion.p>
         </div>
 
@@ -80,7 +80,7 @@ export default function SustainabilityBanner() {
               transition: "all 0.25s ease-in-out",
             }}
           >
-            <span style={{ fontWeight: 600, fontSize: 13 }}>Read more about Sustainability</span>
+            <span style={{ fontWeight: 600, fontSize: 13 }}>{t("home.sustainability.cta")}</span>
             <ArrowRight size={16} className="transition-transform duration-300 group-hover:translate-x-1" />
           </a>
         </motion.div>

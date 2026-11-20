@@ -2,9 +2,11 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { fadeUp, hoverScaleButton, hoverTransition, staggerContainer, tapScaleButton, viewportOnce } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
 // Figma: section.impact-vision, node 3900:238
 export default function ImpactVision() {
+  const { t } = useLanguage();
   return (
     <section id="about" className="bg-white overflow-hidden relative" style={{ paddingTop: 40, paddingBottom: 40 }}>
       <motion.div
@@ -20,7 +22,7 @@ export default function ImpactVision() {
             className="font-inter uppercase"
             style={{ fontWeight: 700, fontSize: 13, letterSpacing: "2px", color: "#c8963e" }}
           >
-            Creating Excellence
+            {t("home.impact.eyebrow")}
           </motion.p>
           <motion.h2
             variants={fadeUp}
@@ -33,10 +35,10 @@ export default function ImpactVision() {
               fontFamily: "var(--font-serif)",
             }}
           >
-            From Paints to Engineering - Multiple Businesses, One Vision of Excellence
+            {t("home.impact.heading")}
           </motion.h2>
           <motion.p variants={fadeUp} style={{ fontSize: 15, lineHeight: 1.7, letterSpacing: "0.2px", color: "#20252b" }}>
-            Our mission is to develop world-class products and services that adhere to international quality standards.
+            {t("home.impact.description")}
           </motion.p>
           <motion.div
             variants={fadeUp}
@@ -48,7 +50,7 @@ export default function ImpactVision() {
               className="group inline-flex items-center rounded-full cursor-pointer"
               style={{ gap: 10, padding: "12px 24px", border: "1.5px solid #1b1b2f" }}
             >
-              <span style={{ fontWeight: 600, fontSize: 14, letterSpacing: "2px", color: "#1b1b2f" }}>Read More</span>
+              <span style={{ fontWeight: 600, fontSize: 14, letterSpacing: "2px", color: "#1b1b2f" }}>{t("common.readMore")}</span>
               <ArrowRight size={16} className="text-[#1b1b2f] transition-transform duration-300 group-hover:translate-x-1" />
             </a>
           </motion.div>

@@ -3,47 +3,31 @@ import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import ScrollRevealImage from "./ScrollRevealImage";
 import { cardUp, fadeUp, hoverLiftCard, hoverScaleButton, hoverTransition, staggerContainer, tapScaleButton, viewportOnce } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
+// Card text lives in src/locales (home.portfolio.items), paired by index
 const BUSINESSES = [
   {
-    title: "BI Painting Solution",
-    description:
-      "BI Group has many different types of interior and exterior paint, creating colour combinations and design ideas for every home.",
     image: "/category-painting.jpg",
     href: "/products/paints",
   },
   {
-    title: "BI Modular Kitchen",
-    description:
-      "Modern modular kitchen and interior solutions combining functionality, design, and everyday convenience for your dream home.",
     image: "/category-kitchen.jpg",
     href: "/products",
   },
   {
-    title: "BI Electronics",
-    description:
-      "Innovative electronic components, air conditioning systems, and smart technology solutions for modern living and industrial automation.",
     image: "/category-electronics.jpg",
     href: "/products",
   },
   {
-    title: "BI Homeopathic",
-    description:
-      "Natural and holistic homeopathic healthcare products, remedies, and wellness solutions trusted by families across India.",
     image: "/category-homeopathic.jpg",
     href: "/products",
   },
   {
-    title: "BI Agriculture",
-    description:
-      "Explore innovative agricultural solutions, advanced farming techniques, and sustainable practices—designed to boost productivity and nurture growth.",
     image: "/category-agriculture.jpg",
     href: "/products",
   },
   {
-    title: "BI Engineering",
-    description:
-      "Delivering precision engineering services, industrial solutions, and infrastructure development—built to power progress and drive innovation.",
     image: "/category-engineering.jpg",
     href: "/products",
   },
@@ -79,6 +63,8 @@ function BusinessCard({ business }) {
 }
 
 export default function BusinessPortfolio() {
+  const { t } = useLanguage();
+  const businesses = BUSINESSES.map((b, i) => ({ ...b, ...t("home.portfolio.items")[i] }));
   return (
     <section id="businesses" className="bg-white" style={{ paddingTop: 100, paddingBottom: 100 }}>
       <motion.div
@@ -91,19 +77,17 @@ export default function BusinessPortfolio() {
       >
         <motion.div variants={fadeUp} className="flex flex-col items-center text-center w-full" style={{ gap: 14, maxWidth: 960 }}>
           <span className="font-inter uppercase" style={{ fontWeight: 700, fontSize: 13, letterSpacing: "2px", color: "#c8963e" }}>
-            One Group. Multiple Possibilities.
+            {t("home.portfolio.eyebrow")}
           </span>
-          <h2 style={{ fontSize: 37, fontWeight: 700, fontFamily: "var(--font-serif)" }}>Different businesses. One shared purpose.</h2>
+          <h2 style={{ fontSize: 37, fontWeight: 700, fontFamily: "var(--font-serif)" }}>{t("home.portfolio.heading")}</h2>
           <p style={{ fontSize: 15, lineHeight: 1.6, color: "#555" }}>
-            BI Group brings together businesses that help people build, improve and protect the spaces around
-            them. From paints and coatings to modular interiors and specialized services, we combine quality,
-            innovation and customer-focused solutions.
+            {t("home.portfolio.description")}
           </p>
         </motion.div>
 
         <motion.div variants={staggerContainer(0.08)} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 w-full" style={{ gap: 24 }}>
-          {BUSINESSES.map((b) => (
-            <BusinessCard key={b.title} business={b} />
+          {businesses.map((b) => (
+            <BusinessCard key={b.image} business={b} />
           ))}
         </motion.div>
 
@@ -113,7 +97,7 @@ export default function BusinessPortfolio() {
             className="inline-flex items-center rounded-full cursor-pointer"
             style={{ gap: 10, padding: "14px 28px", border: "1.5px solid #1b1b2f" }}
           >
-            <span style={{ fontWeight: 600, fontSize: 15, color: "#1b1b2f" }}>View All Businesses</span>
+            <span style={{ fontWeight: 600, fontSize: 15, color: "#1b1b2f" }}>{t("home.portfolio.viewAll")}</span>
             <ArrowRight size={16} className="text-[#1b1b2f]" />
           </a>
         </motion.div>

@@ -105,3 +105,30 @@ a, button {
     padding-right: 3rem;
   }
 }
+
+/* ── Hindi (Devanagari) typography ─────────────────────────────
+   Applied only when <html lang="hi"> (set by LanguageContext).
+   Latin fonts stay first so brand names and numbers keep their look;
+   Devanagari glyphs fall through to Noto. English is untouched. */
+html[lang="hi"] {
+  --font-sans: 'Public Sans', 'Noto Sans Devanagari', sans-serif;
+  --font-public-sans: 'Public Sans', 'Noto Sans Devanagari', sans-serif;
+  --font-inter: 'Inter', 'Noto Sans Devanagari', sans-serif;
+  --font-serif: 'PT Serif', 'Noto Serif Devanagari', Georgia, serif;
+  --font-pt-serif: 'PT Serif', 'Noto Serif Devanagari', Georgia, serif;
+  font-family: 'Public Sans', 'Noto Sans Devanagari', sans-serif;
+}
+
+html[lang="hi"] body {
+  font-family: 'Public Sans', 'Noto Sans Devanagari', Arial, sans-serif;
+}
+
+html[lang="hi"] :is(h1, h2, h3, h4, h5, h6) {
+  font-family: 'PT Serif', 'Noto Serif Devanagari', Georgia, serif;
+  line-height: 1.45 !important; /* room for Devanagari vowel marks */
+}
+
+/* Wide tracking breaks the Devanagari headline stroke (shirorekha) */
+html[lang="hi"] body * {
+  letter-spacing: normal !important;
+}

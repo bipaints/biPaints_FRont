@@ -36,7 +36,11 @@ export function TypingReveal({
     </motion.span>
   );
 
-  if (split === "word") {
+  // Devanagari (Hindi) letters must stay together to shape correctly, so
+  // per-letter splitting falls back to per-word for those strings.
+  const isDevanagari = /[ऀ-ॿ]/.test(text);
+
+  if (split === "word" || isDevanagari) {
     const words = text.split(" ");
     return (
       <>

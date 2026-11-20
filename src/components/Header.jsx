@@ -1,7 +1,8 @@
 import React, { Fragment, useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, ChevronRight, ArrowRight, ExternalLink, Search } from "lucide-react";
+import { Menu, X, ChevronDown, ChevronRight, ArrowRight, ExternalLink, Search, Check } from "lucide-react";
 import { EASE_OUT } from "../lib/motion";
+import { useLanguage, LANGUAGES } from "../context/LanguageContext";
 
 const ABOUT_LINKS = [
   { label: "Overview", href: "/" },
@@ -127,8 +128,6 @@ const NEWSROOM_LINKS = [
   { label: "Events", href: "/newsroom" },
 ];
 
-const LANGUAGES = ["English"];
-
 const NAV_TEXT_STYLE = {
   fontSize: 14,
   lineHeight: "16.8px",
@@ -147,11 +146,29 @@ const NAV_ITEMS = [
   { key: "careers", label: "Careers", href: "/careers", dropdown: null },
 ];
 
-export default function Header() {
+// Routes that belong to each top-level nav item (for the active state)
+const ACTIVE_ROUTES = {
+  about: ["/about", "/what-we-do", "/where-we-are", "/about/achievements"],
+  businesses: ["/products", "/products/paints"],
+};
+
+// Translation keys for each dropdown list (labels paired by index)
+const DROPDOWN_LABEL_KEYS = {
+  about: "nav.aboutLinks",
+  investors: "nav.investorLinks",
+  newsroom: "nav.newsroomLinks",
+};
+
+const isNavItemActive = (item, currentRoute) =>
+  (ACTIVE_ROUTES[item.key] || [item.href]).includes(currentRoute);
+
+export default function Header({ currentRoute = "/" }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(null);
   const [langOpen, setLangOpen] = useState(false);
-  const [lang, setLang] = useState(LANGUAGES[0]);
+  const { language, setLanguage, t } = useLanguage();
+  const currentLanguage = LANGUAGES.find((l) => l.code === language) || LANGUAGES[0];
+  const dropdownLabel = (itemKey, index, fallback) => t(DROPDOWN_LABEL_KEYS[itemKey])[index] ?? fallback;
   const [searchOpen, setSearchOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [mobileExpanded, setMobileExpanded] = useState(null);
@@ -203,7 +220,7 @@ export default function Header() {
         <a href="/" className="shrink-0" onClick={closeDropdown}>
           <img
             src="/bi-logo.svg"
-            alt="BI Group"
+            alt={t("common.biGroup")}
             style={{ height: 35, width: "auto", maxWidth: 1600 }}
           />
         </a>
@@ -219,10 +236,13 @@ export default function Header() {
               <a
                 href={item.href}
                 onClick={closeDropdown}
-                className="flex items-center gap-1 uppercase whitespace-nowrap text-black hover:text-brand"
+                aria-current={isNavItemActive(item, currentRoute) ? "page" : undefined}
+                className={`flex items-center gap-1 uppercase whitespace-nowrap hover:text-brand ${
+                  isNavItemActive(item, currentRoute) ? "text-brand" : "text-black"
+                }`}
                 style={NAV_TEXT_STYLE}
               >
-                {item.label}
+                {t(`nav.items.${item.key}`)}
                 {item.dropdown && (
                   <ChevronDown
                     size={13}
@@ -243,7 +263,7 @@ export default function Header() {
                       className="absolute top-full left-1/2 -translate-x-1/2 mt-4 w-64 rounded-2xl bg-white p-2 border border-black/5"
                       style={{ boxShadow: "0 24px 48px -12px rgba(15,31,61,0.2)" }}
                     >
-                      {item.dropdown.map((sub) => (
+                      {item.dropdown.map((sub, i) => (
                         <a
                           key={sub.label}
                           href={sub.href}
@@ -251,7 +271,7 @@ export default function Header() {
                           className="block px-4 py-2.5 rounded-xl text-small font-medium text-ink-dark/85 hover:bg-brand/5 hover:text-brand"
                           style={{ transition: "all 0.15s ease-out" }}
                         >
-                          {sub.label}
+                          {dropdownLabel(item.key, i, sub.label)}
                         </a>
                       ))}
                     </motion.div>
@@ -276,7 +296,7 @@ export default function Header() {
               >
                 <div className="grid grid-cols-[200px_820px_1fr]" style={{ gap: 56, padding: "40px 140px" }}>
                   <div className="flex flex-col items-start">
-                    {ABOUT_MEGA_MENU.links.map((l) => (
+                    {ABOUT_MEGA_MENU.links.map((l, i) => (
                       <a
                         key={l.label}
                         href={l.href}
@@ -290,7 +310,7 @@ export default function Header() {
                           transition: "color 0.2s ease-in-out",
                         }}
                       >
-                        {l.label}
+                        {t("nav.aboutMega.links")[i]}
                       </a>
                     ))}
                     <a
@@ -306,13 +326,13 @@ export default function Header() {
                         <ArrowRight size={13} className="text-white" />
                       </span>
                       <span style={{ fontSize: 14, fontWeight: 600, color: "rgba(0,0,0,0.75)", letterSpacing: "-0.176px" }}>
-                        {ABOUT_MEGA_MENU.primaryLink.label}
+                        {t("nav.aboutMega.primaryLink")}
                       </span>
                     </a>
                   </div>
 
                   <div className="flex flex-col justify-self-center">
-                    {ABOUT_MEGA_MENU.secondaryLinks.map((l) => (
+                    {ABOUT_MEGA_MENU.secondaryLinks.map((l, i) => (
                       <a
                         key={l.label}
                         href={l.href}
@@ -321,7 +341,7 @@ export default function Header() {
                         style={{ gap: 20, padding: "17px 0" }}
                       >
                         <span className="text-gray-800 uppercase text-lg" style={{ letterSpacing: "-0.176px" }}>
-                          {l.label}
+                          {t("nav.aboutMega.secondaryLinks")[i]}
                         </span>
                         <ChevronRight
                           size={14}
@@ -335,15 +355,15 @@ export default function Header() {
                     <div className="relative w-full overflow-hidden" style={{ aspectRatio: "594 / 364", borderRadius: 12 }}>
                       <img
                         src={ABOUT_MEGA_MENU.feature.image}
-                        alt={ABOUT_MEGA_MENU.feature.title}
+                        alt={t("nav.aboutMega.featureTitle")}
                         className="object-cover w-full h-full"
                       />
                     </div>
                     <h3 style={{ fontWeight: 600, fontSize: 20, color: "rgba(0,0,0,0.75)", letterSpacing: "-0.176px" }}>
-                      {ABOUT_MEGA_MENU.feature.title}
+                      {t("nav.aboutMega.featureTitle")}
                     </h3>
                     <p style={{ fontSize: 14, lineHeight: "22px", color: "rgba(0,0,0,0.75)" }}>
-                      {ABOUT_MEGA_MENU.feature.description}
+                      {t("nav.aboutMega.featureDescription")}
                     </p>
                     <a
                       href={ABOUT_MEGA_MENU.feature.cta.href}
@@ -358,7 +378,7 @@ export default function Header() {
                         <ArrowRight size={13} className="text-white" />
                       </span>
                       <span style={{ fontSize: 14, fontWeight: 600, color: "rgba(0,0,0,0.75)", letterSpacing: "-0.176px" }}>
-                        {ABOUT_MEGA_MENU.feature.cta.label}
+                        {t("nav.aboutMega.featureCta")}
                       </span>
                     </a>
                   </div>
@@ -369,13 +389,13 @@ export default function Header() {
                     <div className="relative shrink-0 overflow-hidden" style={{ width: 100, height: 62, borderRadius: 8 }}>
                       <img
                         src={ABOUT_MEGA_MENU.banner.image}
-                        alt="Paint and colour for your home"
+                        alt={t("nav.aboutMega.bannerImageAlt")}
                         className="object-cover w-full h-full"
                       />
                     </div>
                     <div className="flex flex-col" style={{ gap: 6 }}>
                       <p style={{ fontSize: 16, color: "#ffffff", margin: 0, letterSpacing: "-0.176px" }}>
-                        {ABOUT_MEGA_MENU.banner.title}
+                        {t("nav.aboutMega.bannerTitle")}
                       </p>
                       <a
                         href={ABOUT_MEGA_MENU.banner.cta.href}
@@ -390,7 +410,7 @@ export default function Header() {
                           <ExternalLink size={11} className="text-[#05297c]" />
                         </span>
                         <span style={{ fontWeight: 600, fontSize: 14, color: "#ffffff" }}>
-                          {ABOUT_MEGA_MENU.banner.cta.label}
+                          {t("nav.aboutMega.bannerCta")}
                         </span>
                       </a>
                     </div>
@@ -413,7 +433,7 @@ export default function Header() {
                 className="absolute left-0 right-0 top-full bg-white border-t border-black/5 overflow-hidden"
                 style={{ boxShadow: "0 24px 48px -12px rgba(15,31,61,0.15)" }}
               > */}
-                {/* <div
+          {/* <div
                   className="grid grid-cols-5"
                   style={{
                     padding: "48px 140px",
@@ -421,7 +441,7 @@ export default function Header() {
                     borderBottom: "1px solid rgba(0,0,0,0.06)",
                   }}
                 > */}
-                  {/* {BUSINESS_MEGA_COLUMNS.map((column, colIdx) => (
+          {/* {BUSINESS_MEGA_COLUMNS.map((column, colIdx) => (
                     <Fragment key={colIdx}>
                       {column.map((group) => (
                         <Fragment key={group.category}>
@@ -461,15 +481,22 @@ export default function Header() {
                       ))}
                     </Fragment>
                   ))} */}
-                {/* </div>
+          {/* </div>
               </motion.div>
             )}
           </AnimatePresence> */}
 
           {/* Language Switcher */}
           <div className="relative" onMouseEnter={() => setLangOpen(true)} onMouseLeave={() => setLangOpen(false)}>
-            <button className="flex items-center gap-1 uppercase whitespace-nowrap text-black hover:text-brand" style={NAV_TEXT_STYLE}>
-              {lang === "English" ? "Eng" : lang}
+            <button
+              className="flex items-center gap-1 uppercase whitespace-nowrap text-black hover:text-brand"
+              style={NAV_TEXT_STYLE}
+              aria-label={t("nav.language")}
+              aria-haspopup="listbox"
+              aria-expanded={langOpen}
+              onClick={() => setLangOpen(true)}
+            >
+              {currentLanguage.short}
               <ChevronDown size={13} className={`transition-transform duration-300 ${langOpen ? "rotate-180" : ""}`} />
             </button>
             <AnimatePresence>
@@ -479,17 +506,25 @@ export default function Header() {
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 8, scale: 0.98 }}
                   transition={{ duration: 0.35, ease: EASE_OUT }}
-                  className="absolute top-full right-0 mt-4 w-32 rounded-2xl bg-white p-2 border border-black/5"
+                  className="absolute top-full right-0 mt-4 w-36 rounded-2xl bg-white p-2 border border-black/5"
+                  role="listbox"
+                  aria-label={t("nav.language")}
                   style={{ boxShadow: "0 24px 48px -12px rgba(15,31,61,0.2)" }}
                 >
                   {LANGUAGES.map((l) => (
                     <button
-                      key={l}
-                      onClick={() => { setLang(l); setLangOpen(false); }}
-                      className="block w-full text-left px-4 py-2.5 rounded-xl text-small font-medium text-ink-dark/85 hover:bg-brand/5 hover:text-brand"
+                      key={l.code}
+                      role="option"
+                      aria-selected={language === l.code}
+                      lang={l.code}
+                      onClick={() => { setLanguage(l.code); setLangOpen(false); }}
+                      className={`flex items-center justify-between w-full text-left px-4 py-2.5 rounded-xl text-small font-medium hover:bg-brand/5 hover:text-brand cursor-pointer ${
+                        language === l.code ? "text-brand bg-brand/5" : "text-ink-dark/85"
+                      }`}
                       style={{ transition: "all 0.15s ease-out" }}
                     >
-                      {l}
+                      {l.label}
+                      {language === l.code && <Check size={14} />}
                     </button>
                   ))}
                 </motion.div>
@@ -511,7 +546,7 @@ export default function Header() {
                 >
                   <input
                     type="text"
-                    placeholder="Search…"
+                    placeholder={t("nav.searchPlaceholder")}
                     autoFocus
                     className="w-full bg-cream rounded-full px-4 py-2 text-small text-ink-dark outline-none"
                   />
@@ -519,7 +554,7 @@ export default function Header() {
               )}
             </AnimatePresence>
             <button
-              aria-label="Toggle search"
+              aria-label={t("nav.toggleSearch")}
               onClick={() => setSearchOpen((v) => !v)}
               className="text-black hover:text-brand cursor-pointer"
               style={{ transition: "color 0.2s ease-in-out" }}
@@ -535,12 +570,12 @@ export default function Header() {
         <a href="/" onClick={closeDropdown}>
           <img
             src="/bi-logo.svg"
-            alt="BI Group"
+            alt={t("common.biGroup")}
             style={{ height: 30, width: "auto" }}
           />
         </a>
         <button
-          aria-label="Toggle menu"
+          aria-label={t("nav.toggleMenu")}
           onClick={() => setMobileOpen((v) => !v)}
           className="p-2 relative text-ink-dark hover:text-brand cursor-pointer"
           style={{ transition: "color 0.25s ease-in-out" }}
@@ -576,10 +611,12 @@ export default function Header() {
                   <div key={item.key}>
                     <button
                       onClick={() => setMobileExpanded((v) => (v === item.key ? null : item.key))}
-                      className="flex items-center justify-between w-full px-4 py-3 text-small font-bold uppercase text-ink-dark hover:text-brand hover:bg-black/3 rounded"
+                      className={`flex items-center justify-between w-full px-4 py-3 text-small font-bold uppercase hover:text-brand hover:bg-black/3 rounded ${
+                        isNavItemActive(item, currentRoute) ? "text-brand" : "text-ink-dark"
+                      }`}
                       style={{ transition: "all 0.22s ease-in-out" }}
                     >
-                      {item.label}
+                      {t(`nav.items.${item.key}`)}
                       <ChevronDown
                         size={15}
                         className={`transition-transform duration-300 ${mobileExpanded === item.key ? "rotate-180" : ""}`}
@@ -595,14 +632,14 @@ export default function Header() {
                           className="ml-4 pl-4 border-l-2 border-brand overflow-hidden"
                         >
                           <div className="space-y-3 mb-2 py-1">
-                            {item.dropdown.map((sub) => (
+                            {item.dropdown.map((sub, i) => (
                               <a
                                 key={sub.label}
                                 href={sub.href}
                                 onClick={() => setMobileOpen(false)}
                                 className="block py-1 text-small text-slate hover:text-brand"
                               >
-                                {sub.label}
+                                {dropdownLabel(item.key, i, sub.label)}
                               </a>
                             ))}
                           </div>
@@ -615,10 +652,13 @@ export default function Header() {
                     key={item.key}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className="block px-4 py-3 text-small font-bold uppercase text-ink-dark hover:text-brand hover:bg-black/3 rounded"
+                    aria-current={isNavItemActive(item, currentRoute) ? "page" : undefined}
+                    className={`block px-4 py-3 text-small font-bold uppercase hover:text-brand hover:bg-black/3 rounded ${
+                      isNavItemActive(item, currentRoute) ? "text-brand" : "text-ink-dark"
+                    }`}
                     style={{ transition: "all 0.22s ease-in-out" }}
                   >
-                    {item.label}
+                    {t(`nav.items.${item.key}`)}
                   </a>
                 )
               )}
@@ -626,16 +666,18 @@ export default function Header() {
               <div className="flex items-center gap-2 px-4 pt-3">
                 {LANGUAGES.map((l) => (
                   <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    className="px-3 py-1.5 rounded-full text-[13px] font-semibold"
+                    key={l.code}
+                    lang={l.code}
+                    aria-pressed={language === l.code}
+                    onClick={() => setLanguage(l.code)}
+                    className="px-3 py-1.5 rounded-full text-[13px] font-semibold cursor-pointer"
                     style={{
-                      background: lang === l ? "var(--color-brand)" : "var(--color-cream)",
-                      color: lang === l ? "#fff" : "var(--color-ink-dark)",
+                      background: language === l.code ? "var(--color-brand)" : "var(--color-cream)",
+                      color: language === l.code ? "#fff" : "var(--color-ink-dark)",
                       transition: "all 0.2s ease-in-out",
                     }}
                   >
-                    {l}
+                    {l.label}
                   </button>
                 ))}
               </div>

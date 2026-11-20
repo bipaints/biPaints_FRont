@@ -14,6 +14,26 @@ import AboutPage from './components/AboutPage';
 import WhatWeDo from './pages/WhatWeDo';
 import WhereWeAre from './pages/WhereWeAre';
 import Achievements from './pages/Achievements';
+import Sustainability from './pages/Sustainability';
+import BiFoundation from './pages/BiFoundation';
+import Businesses from './pages/Businesses';
+import Paints from './pages/Paints';
+import Investors from './pages/Investors';
+import Newsroom from './pages/Newsroom';
+import ECommerce from './pages/ECommerce';
+import Careers from './pages/Careers';
+import { useLanguage } from './context/LanguageContext';
+
+// Simple path → page routes (no hash/legacy handling needed).
+const PAGE_ROUTES = {
+  '/bi-foundation': BiFoundation,
+  '/products': Businesses,
+  '/products/paints': Paints,
+  '/investors': Investors,
+  '/newsroom': Newsroom,
+  '/ecommerce': ECommerce,
+  '/careers': Careers,
+};
 
 /**
  * BI Paints & Group Main Application
@@ -36,6 +56,9 @@ function App() {
     if (path === '/about/achievements') {
       return '/about/achievements';
     }
+    if (path === '/sustainability') {
+      return '/sustainability';
+    }
     if (path === '/about' || window.location.hash === '#about') {
       return '/about';
     }
@@ -49,6 +72,7 @@ function App() {
   };
 
   const [currentRoute, setCurrentRoute] = useState(getInitialRoute);
+  const { t } = useLanguage();
 
   useEffect(() => {
     // Sync route on popstate (browser back/forward button clicks)
@@ -56,6 +80,8 @@ function App() {
       const path = window.location.pathname.toLowerCase().replace(/\/$/, '') || '/';
       if (path === '/about/achievements') {
         setCurrentRoute('/about/achievements');
+      } else if (path === '/sustainability') {
+        setCurrentRoute('/sustainability');
       } else if (path === '/about' || window.location.hash === '#about') {
         setCurrentRoute('/about');
       } else if (path === '/what-we-do' || window.location.hash === '#what-we-do') {
@@ -90,14 +116,34 @@ function App() {
       if (!anchor) return;
       const href = anchor.getAttribute('href');
       if (!href) return;
+      const normalizedHref = href.length > 1 ? href.toLowerCase().replace(/\/$/, '') : href;
 
+      // Handle simple page routes (BI Foundation, Businesses, Investors, etc.)
+      if (PAGE_ROUTES[normalizedHref]) {
+        e.preventDefault();
+        if (window.location.pathname !== normalizedHref) {
+          window.history.pushState(null, '', normalizedHref);
+        }
+        setCurrentRoute(normalizedHref);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
       // Handle About Achievements route
+      else
       if (href === '/about/achievements' || href === '/about/achievements/') {
         e.preventDefault();
         if (window.location.pathname !== '/about/achievements') {
           window.history.pushState(null, '', '/about/achievements');
         }
         setCurrentRoute('/about/achievements');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+      // Handle Sustainability route
+      else if (href === '/sustainability' || href === '/sustainability/') {
+        e.preventDefault();
+        if (window.location.pathname !== '/sustainability') {
+          window.history.pushState(null, '', '/sustainability');
+        }
+        setCurrentRoute('/sustainability');
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
       // Handle Where We Are route
@@ -153,7 +199,7 @@ function App() {
       // Handle internal section anchors (#about, #businesses, #kitchens, #sustainability, #investors, #news, #foundation, #ecommerce, #careers, #contact)
       else if (href.startsWith('#')) {
         const targetId = href.slice(1);
-        if (currentRoute === '/about' || currentRoute === '/what-we-do' || currentRoute === '/where-we-are' || currentRoute === '/about/achievements') {
+        if (currentRoute === '/about' || currentRoute === '/what-we-do' || currentRoute === '/where-we-are' || currentRoute === '/about/achievements' || currentRoute === '/sustainability' || PAGE_ROUTES[currentRoute]) {
           // If target element is on the current page (e.g. #global-footprint), scroll to it directly
           const localEl = document.getElementById(targetId);
           if (localEl) {
@@ -201,17 +247,32 @@ function App() {
   const isWhatWeDoPage = currentRoute === '/what-we-do';
   const isWhereWeArePage = currentRoute === '/where-we-are';
   const isAchievementsPage = currentRoute === '/about/achievements';
+  const isSustainabilityPage = currentRoute === '/sustainability';
+  const RoutePage = PAGE_ROUTES[currentRoute];
+  const isHomePage =
+    !RoutePage && !isAboutPage && !isWhatWeDoPage && !isWhereWeArePage && !isAchievementsPage && !isSustainabilityPage;
+
+  // Homepage document title follows the selected language (other pages set their own)
+  useEffect(() => {
+    if (isHomePage) document.title = t('meta.siteTitle');
+  }, [isHomePage, t]);
 
   return (
     <div className="min-h-screen flex flex-col bg-white text-[#0f1f3d]">
       {/* 1. Fixed Top Navigation Bar */}
-      <Header />
+      <Header currentRoute={currentRoute} />
 
       {/* Main Content Area */}
       <main className="flex-1">
-        {isAchievementsPage ? (
+        {RoutePage ? (
+          /* Simple page routes (/bi-foundation, /products, /investors, ...) */
+          <RoutePage />
+        ) : isAchievementsPage ? (
           /* Achievements Page Flow (/about/achievements) */
           <Achievements />
+        ) : isSustainabilityPage ? (
+          /* Sustainability Page Flow (/sustainability) */
+          <Sustainability />
         ) : isWhereWeArePage ? (
           /* Where We Are Page Flow (Recreated 1:1 matching bipaints.netlify.app/where-we-are) */
           <WhereWeAre />

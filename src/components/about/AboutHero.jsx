@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * AboutHero Component
@@ -10,6 +11,7 @@ import React from 'react';
  * - Heading: "About BI Group" centered in PT Serif font (48px)
  */
 function AboutHero() {
+  const { t } = useLanguage();
   return (
     <section className="font-inter pt-[70px] scroll-mt-[70px]">
       <div className="relative w-full overflow-hidden h-[500px] sm:h-[500px] lg:h-[500px]">
@@ -17,7 +19,7 @@ function AboutHero() {
         <div className="absolute inset-0">
           <img
             src="/about-hero-2.jpg"
-            alt="BI Group team on the factory floor"
+            alt={t('about.hero.imageAlt')}
             className="w-full h-full object-cover object-center"
             loading="eager"
           />
@@ -33,7 +35,7 @@ function AboutHero() {
           className="relative h-full flex items-center justify-center text-center font-serif text-2xl sm:text-4xl lg:text-[42px] font-bold text-white tracking-wide drop-shadow-sm px-4"
           style={{ lineHeight: 1.1 }}
         >
-          About BI Group
+          {t('about.hero.title')}
         </h1>
       </div>
     </section>

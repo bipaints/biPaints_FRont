@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import ScrollRevealImage from "./ScrollRevealImage";
 import { fadeUp, fadeUpSmall, staggerContainer, viewportOnce } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
 const PARTNERS = [
   { name: "Ministry of Defence", logo: "/client-ministry-of-defence.png" },
@@ -14,6 +15,8 @@ const PARTNERS = [
 ];
 
 export default function Partners() {
+  const { t } = useLanguage();
+  const partnerNames = t("home.partners.names");
   return (
     <section id="partners" className="font-inter bg-white" style={{ paddingTop: 120, paddingBottom: 80 }}>
       <motion.div
@@ -30,20 +33,19 @@ export default function Partners() {
           style={{ gap: 12, paddingBottom: 20 }}
         >
           <p className="uppercase" style={{ fontWeight: 700, fontSize: 13, letterSpacing: "3px", color: "#c8963e", margin: 0 }}>
-            Our Partners
+            {t("home.partners.eyebrow")}
           </p>
           <p style={{ fontFamily: "var(--font-pt-serif)", fontWeight: 700, fontSize: 32, color: "#0f1f3d", margin: 0 }}>
-            Trusted by India&apos;s Leading Industries
+            {t("home.partners.heading")}
           </p>
           <p style={{ fontWeight: 400, fontSize: 14, color: "#20252b", margin: 0 }}>
-            Partnering with top organizations across defence, steel, energy, and engineering
-            sectors
+            {t("home.partners.description")}
           </p>
         </motion.div>
 
         {/* logo-row (2958:230): gap-48, each 160x64 */}
         <motion.div variants={staggerContainer(0.08)} className="flex flex-wrap items-center justify-center pt-20" style={{ gap: 48 }}>
-          {PARTNERS.map((p) => (
+          {PARTNERS.map((p, i) => (
             <motion.div
               key={p.name}
               variants={fadeUpSmall}
@@ -51,7 +53,7 @@ export default function Partners() {
               style={{ width: 160, height: 64 }}
             >
               <ScrollRevealImage>
-                <img src={p.logo} alt={p.name} className="absolute inset-0 w-full h-full object-contain" />
+                <img src={p.logo} alt={partnerNames[i]} className="absolute inset-0 w-full h-full object-contain" />
               </ScrollRevealImage>
             </motion.div>
           ))}

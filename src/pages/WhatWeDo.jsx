@@ -1,17 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { ArrowRight, ChevronRight, FlaskConical, Palette, Workflow } from "lucide-react";
+import { useLanguage } from "../context/LanguageContext";
+
+// All visible text lives in src/locales (whatWeDo.*); list text is paired by index.
+const withText = (items, text) => items.map((item, i) => ({ ...item, ...text[i] }));
 
 // ==========================================
 // 1. HERO SECTION
 // ==========================================
 const Hero = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative w-full overflow-hidden pt-[70px]" style={{ minHeight: "640px" }}>
       {/* Background Hero Image */}
       <div className="absolute inset-0">
         <img
           src="/wwd2-hero.jpg"
-          alt="BI Group coating application"
+          alt={t("whatWeDo.hero.imageAlt")}
           className="w-full h-full object-cover"
         />
       </div>
@@ -28,10 +33,10 @@ const Hero = () => {
       {/* Hero Content */}
       <div className="relative flex flex-col items-center justify-center text-center mx-auto px-6 py-24 sm:py-28 max-w-[680px] min-h-[560px] gap-7">
         <h2 className="font-bold text-4xl sm:text-[40px] leading-[1.1] m-0 text-[#F4F4F6]">
-          What we do
+          {t("whatWeDo.hero.title")}
         </h2>
         <p className="font-normal text-base leading-[1.6] text-white/85">
-          BI Group brings together paints, coatings, and surface solutions that transform and protect homes, businesses and infrastructure.
+          {t("whatWeDo.hero.description")}
         </p>
 
         {/* CTA Buttons */}
@@ -40,14 +45,14 @@ const Hero = () => {
             href="/products"
             className="inline-flex items-center gap-2 bg-[#eda633] hover:bg-[#d9952a] transition-colors py-[13px] px-7 rounded-[24px]"
           >
-            <span className="font-medium text-sm text-white">Explore Our Businesses</span>
+            <span className="font-medium text-sm text-white">{t("whatWeDo.hero.primaryCta")}</span>
             <ArrowRight size={15} color="#ffffff" />
           </a>
           <a
             href="/about"
             className="inline-flex items-center gap-2 py-3 px-7 rounded-[24px] border-[1.5px] border-white hover:bg-white/10 transition-colors"
           >
-            <span className="font-medium text-sm text-white">Discover BI Group</span>
+            <span className="font-medium text-sm text-white">{t("whatWeDo.hero.secondaryCta")}</span>
             <ArrowRight size={15} color="#ffffff" />
           </a>
         </div>
@@ -60,44 +65,27 @@ const Hero = () => {
 // 2. BUSINESS VERTICALS / CATEGORIES
 // ==========================================
 const BusinessCategories = () => {
-  const categories = [
+  const { t } = useLanguage();
+  const categories = withText([
     {
-      title: "Beautiful homes",
       image: "/wwd2-cat-homes.jpg",
-      description:
-        "BI Group has many different types of interior and exterior paint, creating colour combinations and design ideas for every home.",
     },
     {
-      title: "Shipping",
       image: "/wwd2-cat-shipping.jpg",
-      description:
-        "We help to protect your vessels and increase your hull performance with our broad range of marine coatings.",
     },
     {
-      title: "Energy",
       image: "/wwd2-cat-energy.jpg",
-      description:
-        "Powder and protective coatings to keep your onshore and offshore oil, gas, petrochemical, and refining facilities in the best shape for a long time.",
     },
     {
-      title: "Natural wellness",
       image: "/wwd2-cat-wellness.jpg",
-      description:
-        "Natural and holistic homeopathic healthcare products, remedies, and wellness solutions trusted by families across India.",
     },
     {
-      title: "Dream kitchens",
       image: "/wwd2-cat-kitchens.jpg",
-      description:
-        "Modern modular kitchen and interior solutions combining functionality, design, and everyday convenience for your dream home.",
     },
     {
-      title: "Smart living",
       image: "/wwd2-cat-smartliving.jpg",
-      description:
-        "Innovative electronic components, air conditioning systems, and smart technology solutions for modern living and industrial automation.",
     },
-  ];
+  ], t("whatWeDo.categories.items"));
 
   return (
     <section className="bg-white py-[100px]">
@@ -107,14 +95,14 @@ const BusinessCategories = () => {
           <div className="flex items-center gap-2">
             <span className="w-3 h-[2px] bg-[#c8963e]" />
             <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-[#c8963e]">
-              One Group. Multiple Possibilities.
+              {t("whatWeDo.categories.eyebrow")}
             </span>
           </div>
           <h2 className="font-extrabold text-3xl sm:text-[40px] leading-[1.15] text-[#0a1b3f] m-0">
-            Different businesses. One shared purpose.
+            {t("whatWeDo.categories.heading")}
           </h2>
           <p className="font-normal text-base leading-[1.6] text-[#20252b]">
-            BI Group brings together businesses that help people build, improve and protect the spaces around them. From paints and coatings to modular interiors and specialized services, we combine quality, innovation and customer-focused solutions.
+            {t("whatWeDo.categories.description")}
           </p>
         </div>
 
@@ -122,7 +110,7 @@ const BusinessCategories = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {categories.map((item) => (
             <div
-              key={item.title}
+              key={item.image}
               className="group flex flex-col items-start bg-white overflow-hidden rounded-[16px] h-[380px] border border-[#e5e7eb] hover:shadow-lg transition-shadow"
             >
               {/* Card Image */}
@@ -159,37 +147,29 @@ const BusinessCategories = () => {
 // 3. OUR SOLUTIONS SECTION
 // ==========================================
 const OurSolutions = () => {
-  const [activeTab, setActiveTab] = useState("For Homes");
+  const { t } = useLanguage();
+  const tabLabels = t("whatWeDo.solutions.tabs");
+  const [activeTab, setActiveTab] = useState(0);
 
-  const tabs = ["For Homes", "For Businesses", "For Industries", "For Projects"];
+  const tabs = [0, 1, 2, 3];
 
-  const solutions = [
+  const solutions = withText([
     {
-      title: "Interior Paints",
-      description: "Vibrant, low-VOC finishes for luxury aesthetics and healthy home air quality.",
       image: "/wwd2-solution-0.jpg",
     },
     {
-      title: "Exterior Paints",
-      description: "All-weather extreme shield protection to prevent cracking and dampness.",
       image: "/wwd2-solution-1.jpg",
     },
     {
-      title: "Waterproofing",
-      description: "Multi-layered advanced dynamic protection systems for roof and concrete slabs.",
       image: "/wwd2-solution-2.jpg",
     },
     {
-      title: "Modular Kitchens",
-      description: "Bespoke high-end kitchen installations equipped with soft-close global hardware.",
       image: "/wwd2-solution-3.jpg",
     },
     {
-      title: "Interior Solutions",
-      description: "Integrated wardrobes, custom partitions, and modern architectural solutions.",
       image: "/wwd2-solution-4.jpg",
     },
-  ];
+  ], t("whatWeDo.solutions.items"));
 
   return (
     <section className="bg-[#f4f7fb] py-[100px]">
@@ -199,11 +179,11 @@ const OurSolutions = () => {
           <div className="flex items-center gap-2">
             <span className="w-3 h-[2px] bg-[#d9a441]" />
             <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-[#d9a441]">
-              Our Solutions
+              {t("whatWeDo.solutions.eyebrow")}
             </span>
           </div>
           <h2 className="font-bold text-3xl sm:text-[36px] leading-[1.15] tracking-[-1px] text-[#0b1f3a] m-0">
-            From everyday spaces to demanding environments.
+            {t("whatWeDo.solutions.heading")}
           </h2>
         </div>
 
@@ -223,7 +203,7 @@ const OurSolutions = () => {
                     isActive ? "text-[#d9a441]" : "text-[#20252b] hover:text-[#0b1f3a]"
                   }`}
                 >
-                  {tab}
+                  {tabLabels[tab]}
                 </span>
                 {isActive && <span className="w-10 h-[2px] bg-[#d9a441]" />}
               </button>
@@ -235,7 +215,7 @@ const OurSolutions = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 w-full gap-6">
           {solutions.map((item) => (
             <div
-              key={item.title}
+              key={item.image}
               className="group flex flex-col items-start bg-white overflow-hidden border border-[#eaeaea]"
             >
               <div className="relative w-full overflow-hidden h-[180px]">
@@ -263,33 +243,24 @@ const OurSolutions = () => {
 // 4. FROM COLOUR TO COMPLETE SPACES (PROCESS)
 // ==========================================
 const ProcessSection = () => {
-  const steps = [
+  const { t } = useLanguage();
+  const steps = withText([
     {
       number: "01",
-      title: "Paint",
-      description: "Premium architectural coatings and colour collections.",
     },
     {
       number: "02",
-      title: "Protect",
-      description: "Engineered shielding for harsh weather and industrial corrosion.",
     },
     {
       number: "03",
-      title: "Design",
-      description: "Bespoke modular interior systems crafted around your lifestyle.",
     },
     {
       number: "04",
-      title: "Build",
-      description: "Precision components integrated seamlessly into modern spaces.",
     },
     {
       number: "05",
-      title: "Support",
-      description: "End-to-end consulting and execution for projects of any scale.",
     },
-  ];
+  ], t("whatWeDo.process.steps"));
 
   return (
     <section className="bg-white py-[100px] border-b border-[#eaeaea]">
@@ -300,15 +271,15 @@ const ProcessSection = () => {
             <div className="flex items-center gap-2">
               <span className="w-3 h-[2px] bg-[#d9a441]" />
               <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-[#d9a441]">
-                From Colour To Complete Spaces
+                {t("whatWeDo.process.eyebrow")}
               </span>
             </div>
             <h2 className="font-extrabold text-2xl sm:text-[32px] leading-[1.15] text-[#0b1f3a] m-0">
-              More than products. We create possibilities.
+              {t("whatWeDo.process.heading")}
             </h2>
           </div>
           <p className="flex-1 font-normal text-base sm:text-[18px] leading-[1.6] text-[#555]">
-            From protecting surfaces to creating beautiful living spaces, BI Group connects products, design and services to deliver complete solutions.
+            {t("whatWeDo.process.description")}
           </p>
         </div>
 
@@ -353,26 +324,18 @@ const ProcessSection = () => {
 // 5. INNOVATION SECTION
 // ==========================================
 const Innovation = () => {
-  const cards = [
+  const { t } = useLanguage();
+  const cards = withText([
     {
-      title: "Product Innovation",
-      description:
-        "Improving formulations, durability and performance. We develop specialized coatings engineered to withstand extreme climates and everyday wear.",
       icon: FlaskConical,
     },
     {
-      title: "Design Innovation",
-      description:
-        "Creating modern colours, tactile materials and smart living solutions. Our interior systems integrate global technology with intuitive ergonomics.",
       icon: Palette,
     },
     {
-      title: "Process Innovation",
-      description:
-        "Building smarter systems and more efficient ways of working. From computer-automated manufacturing to optimized supply chains.",
       icon: Workflow,
     },
-  ];
+  ], t("whatWeDo.innovation.cards"));
 
   return (
     <section className="bg-[#0f1a2e] py-[100px]">
@@ -382,14 +345,14 @@ const Innovation = () => {
           <div className="flex items-center gap-2">
             <span className="w-3 h-[2px] bg-white" />
             <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-white">
-              Innovation
+              {t("whatWeDo.innovation.eyebrow")}
             </span>
           </div>
           <h2 className="font-extrabold text-3xl sm:text-[36px] leading-[1.15] text-white m-0">
-            Better ideas create better solutions.
+            {t("whatWeDo.innovation.heading")}
           </h2>
           <p className="font-normal text-base sm:text-[18px] leading-[1.6] text-white/70 max-w-[800px]">
-            We continuously explore new technologies, materials, designs and processes to meet the changing needs of our customers.
+            {t("whatWeDo.innovation.description")}
           </p>
         </div>
 
@@ -399,7 +362,7 @@ const Innovation = () => {
             const Icon = card.icon;
             return (
               <div
-                key={card.title}
+                key={card.icon.displayName || card.title}
                 className="flex flex-col items-start gap-7 p-8 sm:p-12 rounded-[8px] bg-[#122b4a] hover:bg-[#153459] transition-colors"
               >
                 <div>
@@ -426,6 +389,8 @@ const Innovation = () => {
 // 6. OUR PEOPLE SECTION
 // ==========================================
 const OurPeople = () => {
+  const { t } = useLanguage();
+  const statLabels = t("whatWeDo.people.stats");
   return (
     <section className="bg-white py-[100px] border-b border-[#eaeaea]">
       <div className="max-w-[1400px] mx-auto px-6 sm:px-10 lg:px-[140px] flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
@@ -435,14 +400,14 @@ const OurPeople = () => {
             <div className="flex items-center gap-2">
               <span className="w-3 h-[2px] bg-[#d9a441]" />
               <span className="font-inter uppercase font-semibold text-[13px] tracking-[3px] text-[#d9a441]">
-                Our People
+                {t("whatWeDo.people.eyebrow")}
               </span>
             </div>
             <h2 className="font-extrabold text-3xl sm:text-[40px] leading-[1.15] text-[#0b1f3a] m-0">
-              People behind the progress.
+              {t("whatWeDo.people.heading")}
             </h2>
             <p className="font-normal text-[15px] leading-[1.6] text-[#555] max-w-[760px]">
-              Our people bring together expertise, creativity and commitment across every part of the BI Group ecosystem — from engineering to interior design.
+              {t("whatWeDo.people.description")}
             </p>
           </div>
 
@@ -453,7 +418,7 @@ const OurPeople = () => {
                 1,200+
               </span>
               <span className="font-inter uppercase font-semibold text-[12px] tracking-[1px] text-[#1a1f2e]">
-                Dealers &amp; Partners
+                {statLabels[0]}
               </span>
             </div>
             <div className="flex flex-col items-start gap-2">
@@ -461,7 +426,7 @@ const OurPeople = () => {
                 25+
               </span>
               <span className="font-inter uppercase font-semibold text-[12px] tracking-[1px] text-[#1a1f2e]">
-                Locations
+                {statLabels[1]}
               </span>
             </div>
             <div className="flex flex-col items-start gap-2">
@@ -469,7 +434,7 @@ const OurPeople = () => {
                 35+
               </span>
               <span className="font-inter uppercase font-semibold text-[12px] tracking-[1px] text-[#1a1f2e]">
-                Years of Experience
+                {statLabels[2]}
               </span>
             </div>
           </div>
@@ -480,7 +445,7 @@ const OurPeople = () => {
             className="inline-flex items-center gap-3 bg-[#0b1f3a] hover:bg-[#122b4a] transition-colors py-4 px-8 rounded-[4px]"
           >
             <span className="font-inter uppercase font-semibold text-[14px] tracking-[1px] text-white">
-              Life at BI Group
+              {t("whatWeDo.people.cta")}
             </span>
             <ArrowRight size={16} color="#ffffff" />
           </a>
@@ -490,7 +455,7 @@ const OurPeople = () => {
         <div className="group relative w-full flex-1 overflow-hidden h-[400px] sm:h-[560px] rounded-[8px]">
           <img
             src="/wwd2-workplace.jpg"
-            alt="BI Group team on site"
+            alt={t("whatWeDo.people.imageAlt")}
             className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
           />
         </div>
@@ -503,14 +468,12 @@ const OurPeople = () => {
 // 7. OUR PRESENCE (INDIA DISTRIBUTION)
 // ==========================================
 const OurPresence = () => {
-  const distributionStats = [
-    { label: "Corporate Office", count: "1" },
-    { label: "Manufacturing", count: "4" },
-    { label: "Branches", count: "25+" },
-    { label: "Dealers & Partners", count: "1,200+" },
-    { label: "Distributors", count: "80+" },
-    { label: "Service Network", count: "National" },
-  ];
+  const { t } = useLanguage();
+  const distributionLabels = t("whatWeDo.presence.distribution");
+  const distributionStats = ["1", "4", "25+", "1,200+", "80+", t("whatWeDo.presence.national")].map((count, i) => ({
+    label: distributionLabels[i],
+    count,
+  }));
 
   return (
     <section className="bg-[#f4f7fb] py-[100px]">
@@ -521,15 +484,15 @@ const OurPresence = () => {
             <div className="flex items-center gap-2">
               <span className="w-3 h-[2px] bg-[#d9a441]" />
               <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-[#d9a441]">
-                Our Presence
+                {t("whatWeDo.presence.eyebrow")}
               </span>
             </div>
             <h2 className="font-extrabold text-3xl sm:text-[36px] leading-[1.15] text-[#0b1f3a] m-0">
-              Growing across India.
+              {t("whatWeDo.presence.heading")}
             </h2>
           </div>
           <p className="flex-1 font-normal text-base sm:text-[18px] leading-[1.6] text-[#555]">
-            From local markets to a growing national footprint, BI Group continues to expand its presence across India, bringing world-class products closer to you.
+            {t("whatWeDo.presence.description")}
           </p>
         </div>
 
@@ -539,7 +502,7 @@ const OurPresence = () => {
           <div className="relative w-full flex-1 overflow-hidden bg-white h-[400px] sm:h-[500px] rounded-[8px] border border-[#eaeaea] flex items-center justify-center p-8">
             <img
               src="/wwd-india-map.jpg"
-              alt="BI Group presence across India"
+              alt={t("whatWeDo.presence.imageAlt")}
               className="w-full h-full object-contain"
             />
           </div>
@@ -547,7 +510,7 @@ const OurPresence = () => {
           {/* Distribution Stats Card */}
           <div className="flex flex-col items-start w-full lg:w-[420px] shrink-0 gap-6 p-8 sm:p-10 rounded-[8px] bg-[#0b1f3a]">
             <span className="font-inter uppercase font-extrabold text-[18px] text-[#d9a441]">
-              Our Distribution
+              {t("whatWeDo.presence.distributionHeading")}
             </span>
             <div className="flex flex-col w-full">
               {distributionStats.map((item) => (
@@ -572,7 +535,7 @@ const OurPresence = () => {
             className="inline-flex items-center gap-3 bg-[#d9a441] hover:bg-[#c8963e] transition-colors py-4 px-8 rounded-[4px]"
           >
             <span className="font-inter uppercase font-bold text-[14px] tracking-[1px] text-[#0b1f3a]">
-              Explore Our Locations
+              {t("whatWeDo.presence.cta")}
             </span>
             <ChevronRight size={16} color="#0b1f3a" />
           </a>
@@ -586,13 +549,14 @@ const OurPresence = () => {
 // 8. FINAL CTA SECTION
 // ==========================================
 const FinalCTA = () => {
+  const { t } = useLanguage();
   return (
     <section className="relative overflow-hidden py-[100px] sm:py-[140px]">
       {/* Background Image */}
       <div className="absolute inset-0">
         <img
           src="/wwd2-final-cta.jpg"
-          alt="BI Group modern project"
+          alt={t("whatWeDo.finalCta.imageAlt")}
           className="w-full h-full object-cover"
         />
       </div>
@@ -605,14 +569,14 @@ const FinalCTA = () => {
         <div className="flex items-center gap-2">
           <span className="w-3 h-[2px] bg-white" />
           <span className="font-inter uppercase font-bold text-[13px] tracking-[3px] text-white">
-            Partner With Us
+            {t("whatWeDo.finalCta.eyebrow")}
           </span>
         </div>
         <h2 className="font-extrabold text-3xl sm:text-[56px] leading-[1.15] text-white m-0 max-w-[800px]">
-          Let&apos;s build what&apos;s next.
+          {t("whatWeDo.finalCta.heading")}
         </h2>
         <p className="font-normal text-base sm:text-[18px] leading-[1.55] text-white/70 max-w-[700px]">
-          Whether you&apos;re looking for the right solution, planning a project or exploring a partnership, BI Group is ready to work with you.
+          {t("whatWeDo.finalCta.description")}
         </p>
 
         {/* Action Buttons */}
@@ -622,7 +586,7 @@ const FinalCTA = () => {
             className="inline-flex items-center gap-3 bg-[#d9a441] hover:bg-[#c8963e] transition-colors py-4 px-8 rounded-[4px]"
           >
             <span className="font-inter uppercase font-bold text-[14px] tracking-[1px] text-[#0b1f3a]">
-              Talk to BI Group
+              {t("whatWeDo.finalCta.primaryCta")}
             </span>
             <ChevronRight size={16} color="#0b1f3a" />
           </a>
@@ -631,7 +595,7 @@ const FinalCTA = () => {
             className="inline-flex items-center gap-3 bg-transparent hover:bg-white/10 transition-colors py-4 px-8 rounded-[4px] border border-white"
           >
             <span className="font-inter uppercase font-bold text-[14px] tracking-[1px] text-white">
-              Explore Our Businesses
+              {t("whatWeDo.finalCta.secondaryCta")}
             </span>
             <ChevronRight size={16} color="#ffffff" />
           </a>
@@ -645,12 +609,17 @@ const FinalCTA = () => {
 // MAIN WHAT WE DO PAGE COMPONENT
 // ==========================================
 const WhatWeDo = () => {
+  const { t } = useLanguage();
+
   useEffect(() => {
-    // Set page title matching reference site
-    document.title = "What We Do | BI Group";
     // Ensure smooth scroll to top on page load
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, []);
+
+  useEffect(() => {
+    // Set page title matching reference site (follows the selected language)
+    document.title = t("whatWeDo.pageTitle");
+  }, [t]);
 
   return (
     <div className="w-full bg-white text-[#F4F4F6]">

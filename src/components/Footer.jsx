@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Mail, MapPin, Phone } from "lucide-react";
 import { fadeUp, staggerContainer, viewportOnce } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
+
+// Link/label text lives in src/locales (footer.*), paired by index
 
 const BUSINESS_LINKS = [
   { label: "Paints & Coatings", href: "/products/paints" },
@@ -23,9 +26,9 @@ const QUICK_LINKS = [
 ];
 
 const CONTACT_ITEMS = [
-  { icon: MapPin, label: "Location", value: "Plot No. G-505, Boranada, Jodhpur, Rajasthan, India" },
-  { icon: Mail, label: "Email", value: "info@bipaints.com", href: "mailto:info@bipaints.com" },
-  { icon: Phone, label: "Phone", value: "+91 1234 567890", href: "tel:+911234567890" },
+  { icon: MapPin, labelKey: "footer.contact.location", valueKey: "footer.contact.locationValue" },
+  { icon: Mail, labelKey: "footer.contact.email", value: "info@bipaints.com", href: "mailto:info@bipaints.com" },
+  { icon: Phone, labelKey: "footer.contact.phone", value: "+91 1234 567890", href: "tel:+911234567890" },
 ];
 
 const BOTTOM_LINKS = [
@@ -62,12 +65,20 @@ const SOCIALS = [
 ];
 
 export default function Footer() {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ name: "", email: "", industry: "", consent: false });
+  const [subscribed, setSubscribed] = useState(false);
+  const industries = t("footer.newsletter.industries");
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setForm({ name: "", email: "", industry: "", consent: false });
+    setSubscribed(true);
   };
+
+  // Browser validation messages in the selected language
+  const invalidMessage = (key) => (e) => e.target.setCustomValidity(t(`footer.newsletter.errors.${key}`));
+  const clearMessage = (e) => e.target.setCustomValidity("");
 
   return (
     <footer id="contact" className="bg-white">
@@ -85,25 +96,27 @@ export default function Footer() {
             className="lg:flex-1"
             style={{ fontFamily: "var(--font-pt-serif)", fontWeight: 700, fontSize: 32, lineHeight: "42px", color: "#0f1f3d" }}
           >
-            Subscribe to BI Insider and get the latest industry updates
+            {t("footer.newsletter.heading")}
           </p>
 
           <form onSubmit={handleSubmit} className="lg:flex-1 flex flex-col" style={{ gap: 16 }}>
             <div className="grid grid-cols-1 sm:grid-cols-3" style={{ gap: 16 }}>
               <input
                 type="text"
-                placeholder="First and last name"
+                placeholder={t("footer.newsletter.namePlaceholder")}
                 value={form.name}
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+                onChange={(e) => { clearMessage(e); setSubscribed(false); setForm((f) => ({ ...f, name: e.target.value })); }}
+                onInvalid={invalidMessage("name")}
                 required
                 className="bg-white outline-none placeholder:text-[#999] focus:border-brand"
                 style={{ padding: "14px 16px", borderRadius: 8, border: "1px solid #d1c9b8", fontSize: 14, color: "#0f1f3d" }}
               />
               <input
                 type="email"
-                placeholder="Your e-mail address"
+                placeholder={t("footer.newsletter.emailPlaceholder")}
                 value={form.email}
-                onChange={(e) => setForm((f) => ({ ...f, email: e.target.value }))}
+                onChange={(e) => { clearMessage(e); setSubscribed(false); setForm((f) => ({ ...f, email: e.target.value })); }}
+                onInvalid={invalidMessage("email")}
                 required
                 className="bg-white outline-none placeholder:text-[#999] focus:border-brand"
                 style={{ padding: "14px 16px", borderRadius: 8, border: "1px solid #d1c9b8", fontSize: 14, color: "#0f1f3d" }}
@@ -121,11 +134,11 @@ export default function Footer() {
                 }}
               >
                 <option value="" disabled>
-                  Choose your preferred…
+                  {t("footer.newsletter.industryPlaceholder")}
                 </option>
-                {INDUSTRIES.map((ind) => (
+                {INDUSTRIES.map((ind, i) => (
                   <option key={ind} value={ind}>
-                    {ind}
+                    {industries[i]}
                   </option>
                 ))}
               </select>
@@ -136,17 +149,18 @@ export default function Footer() {
                 <input
                   type="checkbox"
                   checked={form.consent}
-                  onChange={(e) => setForm((f) => ({ ...f, consent: e.target.checked }))}
+                  onChange={(e) => { clearMessage(e); setForm((f) => ({ ...f, consent: e.target.checked })); }}
+                  onInvalid={invalidMessage("consent")}
                   required
                   className="mt-0.5 shrink-0 accent-brand cursor-pointer"
                   style={{ width: 16, height: 16, borderRadius: 3 }}
                 />
                 <span style={{ fontSize: 13, color: "#555" }}>
-                  I consent to my e-mail address being used in accordance with our{" "}
+                  {t("footer.newsletter.consentBefore")}{" "}
                   <a href="/privacy" className="underline hover:text-brand" style={{ transition: "color 0.2s ease-in-out" }}>
-                    privacy policy
+                    {t("footer.newsletter.consentLink")}
                   </a>
-                  .
+                  {t("footer.newsletter.consentAfter")}
                 </span>
               </label>
 
@@ -155,9 +169,14 @@ export default function Footer() {
                 className="shrink-0 hover:bg-brand-dark cursor-pointer"
                 style={{ padding: "14px 32px", borderRadius: 8, fontSize: 15, fontWeight: 600, color: "#fff", background: "#1a5276" }}
               >
-                Subscribe
+                {t("footer.newsletter.subscribe")}
               </button>
             </div>
+            {subscribed && (
+              <p role="status" style={{ fontSize: 13, color: "#1a5276", fontWeight: 600 }}>
+                {t("footer.newsletter.success")}
+              </p>
+            )}
           </form>
         </motion.div>
       </div>
@@ -174,21 +193,19 @@ export default function Footer() {
         >
           <motion.div variants={fadeUp} className="flex flex-col" style={{ gap: 20 }}>
             <a href="/" className="inline-block w-fit">
-              <img src="/bi-logo.svg" alt="BI Group" style={{ height: 40, width: "auto" }} />
+              <img src="/bi-logo.svg" alt={t("common.biGroup")} style={{ height: 40, width: "auto" }} />
             </a>
             <p style={{ fontSize: 13, lineHeight: "20.8px", color: "#6b7280" }}>
-              BI Group is a leading manufacturer of paints, coatings &amp; engineering solutions, delivering
-              innovative, high-performance products for industrial, infrastructure, and residential sectors
-              across India.
+              {t("footer.about")}
             </p>
             <div className="flex flex-col" style={{ gap: 12 }}>
-              <p style={{ fontWeight: 600, fontSize: 13, color: "#0f1f3d" }}>Follow Us:</p>
+              <p style={{ fontWeight: 600, fontSize: 13, color: "#0f1f3d" }}>{t("footer.followUs")}</p>
               <div className="flex items-center" style={{ gap: 12 }}>
                 {SOCIALS.map(({ icon: Icon, href, label }) => (
                   <a
                     key={label}
                     href={href}
-                    aria-label={label}
+                    aria-label={t(`footer.social.${label.toLowerCase()}`)}
                     className="flex items-center justify-center text-white hover:bg-brand cursor-pointer"
                     style={{ width: 36, height: 36, borderRadius: 18, background: "#0f1f3d", transition: "background-color 0.2s ease-in-out" }}
                   >
@@ -201,13 +218,13 @@ export default function Footer() {
 
           <motion.div variants={fadeUp} className="flex flex-col" style={{ gap: 20 }}>
             <div className="flex flex-col" style={{ gap: 8 }}>
-              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>Our Businesses</h3>
+              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>{t("footer.businessesHeading")}</h3>
               <span style={{ width: 40, height: 3, borderRadius: 2, background: "#c8963e" }} />
             </div>
             <div className="flex flex-col" style={{ gap: 10 }}>
-              {BUSINESS_LINKS.map((link) => (
+              {BUSINESS_LINKS.map((link, i) => (
                 <a key={link.label} href={link.href} className="hover:text-brand-dark cursor-pointer" style={{ fontSize: 14, color: "#6b7280", transition: "color 0.2s ease-in-out" }}>
-                  {link.label}
+                  {t("footer.businessLinks")[i]}
                 </a>
               ))}
             </div>
@@ -215,13 +232,13 @@ export default function Footer() {
 
           <motion.div variants={fadeUp} className="flex flex-col" style={{ gap: 20 }}>
             <div className="flex flex-col" style={{ gap: 8 }}>
-              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>Quick Links</h3>
+              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>{t("footer.quickLinksHeading")}</h3>
               <span style={{ width: 40, height: 3, borderRadius: 2, background: "#c8963e" }} />
             </div>
             <div className="flex flex-col" style={{ gap: 10 }}>
-              {QUICK_LINKS.map((link) => (
+              {QUICK_LINKS.map((link, i) => (
                 <a key={link.label} href={link.href} className="hover:text-brand-dark cursor-pointer" style={{ fontSize: 14, color: "#6b7280", transition: "color 0.2s ease-in-out" }}>
-                  {link.label}
+                  {t("footer.quickLinks")[i]}
                 </a>
               ))}
             </div>
@@ -229,11 +246,13 @@ export default function Footer() {
 
           <motion.div variants={fadeUp} className="flex flex-col" style={{ gap: 20 }}>
             <div className="flex flex-col" style={{ gap: 8 }}>
-              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>Get In Touch</h3>
+              <h3 style={{ fontWeight: 700, fontSize: 18, color: "#0f1f3d", fontFamily: "var(--font-serif)" }}>{t("footer.contactHeading")}</h3>
               <span style={{ width: 40, height: 3, borderRadius: 2, background: "#c8963e" }} />
             </div>
             <div className="flex flex-col" style={{ gap: 16 }}>
-              {CONTACT_ITEMS.map(({ icon: Icon, label, value, href }) => {
+              {CONTACT_ITEMS.map(({ icon: Icon, labelKey, valueKey, value: rawValue, href }) => {
+                const label = t(labelKey);
+                const value = valueKey ? t(valueKey) : rawValue;
                 const row = (
                   <div className="flex items-start" style={{ gap: 12 }}>
                     <span
@@ -249,11 +268,11 @@ export default function Footer() {
                   </div>
                 );
                 return href ? (
-                  <a key={label} href={href} className="hover:opacity-80 cursor-pointer">
+                  <a key={labelKey} href={href} className="hover:opacity-80 cursor-pointer">
                     {row}
                   </a>
                 ) : (
-                  <div key={label}>{row}</div>
+                  <div key={labelKey}>{row}</div>
                 );
               })}
             </div>
@@ -264,11 +283,11 @@ export default function Footer() {
       {/* section.copyright (2276:629): bg #f5f3ee, px-312 py-20, text 13px */}
       <div style={{ borderTop: "1px solid #f4f7fb", background: "#f4f7fb" }}>
         <div className="flex flex-col sm:flex-row items-center justify-between px-6 sm:px-10 lg:px-35" style={{ paddingTop: 20, paddingBottom: 20, gap: 12 }}>
-          <p style={{ fontSize: 13, color: "#777" }}>2026 © BI Group of Companies. All rights reserved.</p>
+          <p style={{ fontSize: 13, color: "#777" }}>{t("footer.copyright")}</p>
           <div className="flex flex-wrap items-center justify-center" style={{ columnGap: 32, rowGap: 4 }}>
-            {BOTTOM_LINKS.map((item) => (
+            {BOTTOM_LINKS.map((item, i) => (
               <a key={item.label} href={item.href} className="hover:text-brand cursor-pointer" style={{ fontSize: 13, color: item.accent ? "#1a5276" : "#555", transition: "color 0.2s ease-in-out" }}>
-                {item.label}
+                {t("footer.bottomLinks")[i]}
               </a>
             ))}
           </div>

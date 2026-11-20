@@ -5,6 +5,7 @@ import AboutChairman from './about/AboutChairman';
 import AboutJourney from './about/AboutJourney';
 import AboutValues from './about/AboutValues';
 import AboutSustainability from './about/AboutSustainability';
+import { useLanguage } from '../context/LanguageContext';
 
 /**
  * AboutPage Component
@@ -19,12 +20,17 @@ import AboutSustainability from './about/AboutSustainability';
  * 6. Commitment to Sustainability: Green future features with eco-factory imagery (/about-eco-factory.jpg)
  */
 function AboutPage() {
+  const { t } = useLanguage();
+
   useEffect(() => {
-    // Set matching page title
-    document.title = 'About BI Group – Engineering Solutions Built To Last';
     // Scroll to top on page mount
     window.scrollTo(0, 0);
   }, []);
+
+  useEffect(() => {
+    // Set matching page title (follows the selected language)
+    document.title = t('about.pageTitle');
+  }, [t]);
 
   return (
     <div className="w-full bg-white text-[#0f1f3d]">

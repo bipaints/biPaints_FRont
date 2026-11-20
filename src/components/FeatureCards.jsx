@@ -2,36 +2,28 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Building2, PaintBucket, ShieldCheck } from "lucide-react";
 import { cardUp, fadeUp, staggerContainer, viewportOnce } from "../lib/motion";
+import { useLanguage } from "../context/LanguageContext";
 
+// Card text lives in src/locales (home.features.cards), paired by index
 const CARDS = [
   {
     icon: PaintBucket,
-    title: "Explore Our Coatings",
-    description:
-      "Browse BI Group's comprehensive range of industrial and decorative coatings. Find the right product for your specific application needs.",
-    linkText: "Find the right coating",
     href: "/products/paints",
   },
   {
     icon: ShieldCheck,
-    title: "Custom Coating Solutions",
-    description:
-      "Get tailored coating systems designed for your unique requirements. Our experts match the optimal solution to your project specifications.",
-    linkText: "Get a consultation",
     href: "/contact",
   },
   {
     icon: Building2,
-    title: "Discover BI Group",
-    description:
-      "Your complete resource for coatings, modular interiors, and engineering services. Explore our integrated business verticals.",
-    linkText: "Learn more",
     href: "/about",
   },
 ];
 
 // Figma: feature-cards-section, node 4128:220
 export default function FeatureCards() {
+  const { t } = useLanguage();
+  const cards = CARDS.map((card, i) => ({ ...card, ...t("home.features.cards")[i] }));
   return (
     <section id="solutions" style={{ background: "#f5f5f5", paddingTop: 80, paddingBottom: 96 }}>
       <motion.div
@@ -44,17 +36,17 @@ export default function FeatureCards() {
       >
         <motion.div variants={fadeUp} className="flex flex-col items-center text-center" style={{ gap: 12, maxWidth: 800 }}>
           <p className="font-inter uppercase" style={{ fontWeight: 700, fontSize: 14, letterSpacing: "1.5px", color: "#c8963e" }}>
-            Explore Our Solutions
+            {t("home.features.eyebrow")}
           </p>
           <h2 style={{ fontSize: 32, lineHeight: 1.2, fontWeight: 700, fontFamily: "var(--font-serif)" }}>
-            From products to personalised solutions
+            {t("home.features.heading")}
           </h2>
         </motion.div>
 
         <motion.div variants={staggerContainer(0.1)} className="grid grid-cols-1 md:grid-cols-3 w-full" style={{ gap: 32 }}>
-          {CARDS.map(({ icon: Icon, title, description, linkText, href }) => (
+          {cards.map(({ icon: Icon, title, description, linkText, href }) => (
             <motion.div
-              key={title}
+              key={href}
               variants={cardUp}
               className="flex flex-col justify-between bg-white"
               style={{ padding: 40, borderRadius: 8, boxShadow: "0px 12px 16px rgba(0,0,0,0.04)" }}

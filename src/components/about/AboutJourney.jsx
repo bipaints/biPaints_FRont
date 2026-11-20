@@ -1,5 +1,6 @@
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 /**
  * AboutJourney Component
@@ -7,6 +8,7 @@ import { ArrowRight } from 'lucide-react';
  * Matching bipaints.netlify.app/about (Section 4)
  */
 function AboutJourney() {
+  const { t } = useLanguage();
   return (
     <section id="journey" className="w-full py-6 lg:py-8 scroll-mt-14">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-[140px]">
@@ -16,7 +18,7 @@ function AboutJourney() {
           <div className="relative w-full lg:flex-1 h-[240px] sm:h-[320px] lg:h-[420px] overflow-hidden">
             <img
               src="/about-journey-building.jpg"
-              alt="BI Group headquarters building"
+              alt={t('about.journey.imageAlt')}
               className="w-full h-full object-cover"
             />
           </div>
@@ -25,10 +27,10 @@ function AboutJourney() {
           <div className="bg-white flex flex-1 flex-col justify-center px-6 sm:px-10 lg:px-14 py-6 sm:py-8 lg:py-10 space-y-5 sm:space-y-6">
             <div className="flex flex-col items-start w-full gap-3">
               <h2 className="uppercase font-serif text-xl sm:text-[24px] leading-tight tracking-[2px] text-[#0a1b3f] m-0 font-bold">
-                Our Journey
+                {t('about.journey.heading')}
               </h2>
               <p className="font-normal text-sm sm:text-[15px] leading-relaxed text-[#4b5563] m-0">
-                Dive into the journey of how a commodity trading firm became one of the most dynamic industrial conglomerates in India.
+                {t('about.journey.description')}
               </p>
             </div>
 
@@ -54,7 +56,7 @@ function AboutJourney() {
                   className="group inline-flex items-center rounded-full border-[1.5px] border-[#1b1b2f] hover:bg-[#1b1b2f] hover:text-white px-6 py-3 transition-all duration-300 gap-2.5 cursor-pointer shadow-xs hover:shadow-md"
                 >
                   <span className="font-semibold text-sm text-[#1b1b2f] group-hover:text-white transition-colors">
-                    View Timeline
+                    {t('about.journey.cta')}
                   </span>
                   <ArrowRight
                     size={16}
