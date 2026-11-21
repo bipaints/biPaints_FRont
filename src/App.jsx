@@ -28,6 +28,7 @@ import { useLanguage } from './context/LanguageContext';
 const PAGE_ROUTES = {
   '/bi-foundation': BiFoundation,
   '/products': Businesses,
+  '/businesses': Businesses, // alias — homepage "View All Businesses" links here
   '/products/paints': Paints,
   '/investors': Investors,
   '/newsroom': Newsroom,

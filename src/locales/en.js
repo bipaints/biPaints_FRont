@@ -800,6 +800,115 @@ const en = {
     },
   },
 
+  // Businesses page (/products). Business items are paired by index with
+  // the BUSINESSES config in src/pages/Businesses.jsx.
+  businesses: {
+    pageTitle: "Our Businesses – BI Group",
+    hero: {
+      imageAlt: "Modern glass office building in bright daylight",
+      eyebrow: "BI Group · Mahavir Group",
+      title: "Our Businesses",
+      subtitle: "One Group. Multiple Businesses. One Vision.",
+      description:
+        "A diverse group of businesses driven by innovation, quality, and a shared commitment to creating lasting value.",
+      cta: "Explore Businesses",
+      secondaryCta: "Contact Us",
+      indexLabel: "Business index",
+    },
+    intro: {
+      eyebrow: "Our Portfolio",
+      heading: "Explore Our Business Verticals",
+      description:
+        "Discover the diverse businesses operating under the Mahavir Group, bringing together different industries under a shared vision.",
+    },
+    grid: {
+      eyebrow: "Six Business Verticals",
+      heading: "Built across industries",
+      cta: "Explore More",
+    },
+    featured: {
+      eyebrow: "Featured Businesses",
+      heading: "A closer look at each business",
+      cta: "Explore Business",
+      comingSoon: "Business page coming soon",
+    },
+    vision: {
+      imageAlt: "White glass tower against a bright sky",
+      eyebrow: "Group Vision",
+      heading: "Different Industries. One Shared Vision.",
+      description:
+        "Each business brings its own expertise. Together, they share one commitment — quality, innovation and lasting value.",
+    },
+    closing: {
+      heading: "Discover the World of BI Group",
+      description: "Explore our businesses and discover the diverse capabilities of the group.",
+      cta: "Explore Our Businesses",
+      secondaryCta: "Get in Touch",
+    },
+    items: [
+      {
+        name: "BI Paints",
+        industry: "Paints & Coatings",
+        cardAlt: "Stacks of BI PAINTS branded paint buckets in a warehouse",
+        featureAlt: "BI PAINTS product range in a bright living room",
+        summary:
+          "Interior, exterior and protective coatings that bring colour, finish and lasting protection to every surface.",
+        description:
+          "From decorative interior shades to durable exterior and industrial coatings, BI Paints brings colour and protection together — helping homes and buildings look better and last longer.",
+      },
+      {
+        name: "BI Modular / Interiors",
+        industry: "Modular Kitchens & Interiors",
+        cardAlt: "Bright modern modular kitchen with white cabinetry",
+        featureAlt: "Bright contemporary living room with modern furniture",
+        summary:
+          "Modular kitchens, wardrobes and interior solutions that combine thoughtful design with everyday convenience.",
+        description:
+          "Modular kitchens, wardrobes and complete interior solutions designed around the way people live — combining functionality, clean design and everyday convenience.",
+      },
+      {
+        name: "BI Electronics",
+        industry: "Electronics & Technology",
+        cardAlt: "Close-up of gold circuit tracks on a printed circuit board",
+        featureAlt: "Technician assembling an electronic circuit board",
+        summary:
+          "Electronic components, home appliances and smart technology solutions for modern living and industry.",
+        description:
+          "Electronic components, air conditioning, home appliances and smart technology solutions — bringing dependable technology to modern homes and industrial applications.",
+      },
+      {
+        name: "BI Agriculture",
+        industry: "Agriculture & Farming",
+        cardAlt: "Rows of healthy plants growing inside a greenhouse",
+        featureAlt: "Farmers working in green paddy fields",
+        summary:
+          "Agricultural solutions and modern farming practices designed to support productivity and sustainable growth.",
+        description:
+          "Agricultural solutions, modern cultivation practices and farming support — designed to help improve productivity while nurturing sustainable growth.",
+      },
+      {
+        name: "BI Homeopathic",
+        industry: "Homeopathic Products",
+        cardAlt: "Homeopathic globules beside a small amber bottle and fresh flowers",
+        featureAlt: "Collection of labelled homeopathic remedy vials",
+        summary:
+          "Homeopathic products prepared and packaged with a focus on quality, care and trust.",
+        description:
+          "A range of homeopathic products presented with a clear focus on quality, careful preparation and trustworthy packaging for families.",
+      },
+      {
+        name: "BI Engineering",
+        industry: "Engineering & Industrial",
+        cardAlt: "Stainless steel industrial process plant with pumps and piping",
+        featureAlt: "Engineer working on an industrial automation system",
+        summary:
+          "Engineering services and industrial solutions built on precision, capability and reliability.",
+        description:
+          "Precision engineering services and industrial solutions — supporting fabrication, manufacturing and infrastructure projects with technical capability and reliability.",
+      },
+    ],
+  },
+
   skeleton: {
     defaultDescription: "This page is currently being developed. Please check back soon.",
     comingSoon: "Coming Soon",

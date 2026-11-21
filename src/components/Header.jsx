@@ -149,7 +149,7 @@ const NAV_ITEMS = [
 // Routes that belong to each top-level nav item (for the active state)
 const ACTIVE_ROUTES = {
   about: ["/about", "/what-we-do", "/where-we-are", "/about/achievements"],
-  businesses: ["/products", "/products/paints"],
+  businesses: ["/products", "/businesses", "/products/paints"],
 };
 
 // Translation keys for each dropdown list (labels paired by index)
